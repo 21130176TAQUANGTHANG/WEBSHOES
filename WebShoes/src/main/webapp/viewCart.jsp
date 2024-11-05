@@ -44,7 +44,7 @@
 
         if (cartItems.isEmpty()) {
     %>
-    <div class="alert alert-warning" role="alert">Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm vào giỏ hàng</div>
+    <div class="alert alert-warning" role="alert">Giỏ hàng của hiện bạn trống. Vui lòng thêm sản phẩm vào giỏ hàng</div>
     <%
     } else {
         int totalPriceForAllProducts = 0;
