@@ -1,6 +1,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="LoginUser.User" %>
+<%@ page import="LoginUser.GoogleAccount" %>
+<%@ page import="LoginUser.AccountFF" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -71,19 +74,35 @@
                     </button>
                 </form>
 
-                <span class="navbar-text me-3">Xin chào: </span>
+                <%
+                    User username = (User) session.getAttribute("user");
+                    GoogleAccount googleUser = (GoogleAccount) session.getAttribute("googleUser"); // Thay đổi thành GoogleAccount
+                    AccountFF facebookUser = (AccountFF) session.getAttribute("facebookUser"); // Lấy đối tượng AccountFF
+
+                    if (username != null) {
+                %>
+                <span class="navbar-text me-3">Xin chào: <%=username.getUsername()%></span>
                 <a href="LogoutServlet" class="btn btn-danger">Logout</a>
                 <a href="OrderHistory">Lịch sử đơn hàng</a>
-
-                <span class="navbar-text me-3">Xin chào: </span>
+                <%
+                } else if (googleUser != null) {
+                %>
+                <span class="navbar-text me-3">Xin chào: <%=googleUser.getName()%></span>
                 <a href="LogoutServlet" class="btn btn-danger">Logout</a>
                 <a href="OrderHistory">Lịch sử đơn hàng</a>
-
-                <span class="navbar-text me-3">Xin chào:</span> <!-- Lấy tên từ đối tượng -->
+                <%
+                } else if (facebookUser != null) { // Kiểm tra đối tượng facebookUser
+                %>
+                <span class="navbar-text me-3">Xin chào: <%=facebookUser.getName()%></span> <!-- Lấy tên từ đối tượng -->
                 <a href="LogoutServlet" class="btn btn-danger">Logout</a>
                 <a href="OrderHistory">Lịch sử đơn hàng</a>
-
+                <%
+                } else {
+                %>
                 <a href="Login.jsp" class="btn btn-danger">Đăng nhập</a>
+                <%
+                    }
+                %>
             </div>
         </div>
     </nav>
