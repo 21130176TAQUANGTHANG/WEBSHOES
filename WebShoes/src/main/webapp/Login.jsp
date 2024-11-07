@@ -1,3 +1,8 @@
+<%@ page import="LoginUser.User" %>
+<%@ page import="LoginUser.GoogleAccount" %>
+<%@ page import="LoginUser.AccountFF" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: thang
@@ -44,14 +49,13 @@
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Trang chủ</a>
+            <a class="nav-link active" aria-current="page" href="product">Trang chủ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Danh sách sản phẩm</a>
+            <a class="nav-link" href="listproduct.jsp">Danh sách sản phẩm</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="#">Giới thiệu</a
-            >
+            <a class="nav-link" href="viewCart.jsp">Giỏ hàng</a>
           </li>
         </ul>
         <form class="d-flex input-group w-auto me-3">
@@ -70,11 +74,11 @@
             Tìm kiếm
           </button>
         </form>
-        <a href="Login.jsp" class="btn btn-danger">Đăng nhập</a>
       </div>
     </div>
   </nav>
 </header>
+
 
 <div>
   <section class="py-3 py-md-5 py-xl-8">

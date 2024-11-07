@@ -23,31 +23,36 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String repeatPassword = request.getParameter("repeatPassword");
-        int phone = Integer.parseInt(request.getParameter("phone"));
+        String phoneStr = request.getParameter("phone");
         String address = request.getParameter("address");
 
         if (!password.equals(repeatPassword)) {
-            // Xử lý trường hợp mật khẩu và repeat password không khớp
             response.getWriter().println("Mật khẩu không khớp, vui lòng thử lại.");
             return;
         }
-        if (username == null || username.isEmpty() ||
-                email == null || email.isEmpty() ||
-                password == null || password.isEmpty() ||
-                phone == 0 ||
-                address == null || address.isEmpty()) {
 
+        if (password.contains(" ") || password.length() < 6) {
+            response.getWriter().println("Mật khẩu không hợp lệ. Vui lòng đảm bảo không có khoảng trắng và có ít nhất 6 ký tự.");
+            return;
+        }
+
+        int phone = 0;
+        try {
+            phone = Integer.parseInt(phoneStr);
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Số điện thoại không hợp lệ.");
+            return;
+        }
+
+        if (username == null || username.isEmpty() || email == null || email.isEmpty() || address == null || address.isEmpty()) {
             response.getWriter().println("Vui lòng điền đầy đủ thông tin.");
             return;
         }
 
-
         DBDAO dbdao = new DBDAO();
         User user = new User(username, password, email, phone, address);
         dbdao.registerUser(user);
-
-        // Sau khi đăng ký thành công, bạn có thể chuyển hướng về trang login hoặc trang chính
         response.sendRedirect("Login.jsp");
-
     }
+
 }

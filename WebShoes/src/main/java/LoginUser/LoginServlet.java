@@ -19,14 +19,16 @@ public class LoginServlet extends HttpServlet {
             String password = request.getParameter("password");
             DBDAO dbdao = new DBDAO();
             User user = dbdao.checkLogin(email, password);
+            HttpSession session = request.getSession();
+
 
             if (user != null) {
                 // Đăng nhập thành công
-                HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 response.sendRedirect("product");
             } else {
                 // Đăng nhập thất bại
+                request.setAttribute("error", "Sai tài khoản hoặc mật khẩu");
                 response.sendRedirect("Login.jsp");
             }
         } catch (Exception e) {

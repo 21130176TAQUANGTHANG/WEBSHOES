@@ -13,31 +13,36 @@ import java.io.IOException;
 
 @WebServlet(name = "LoginFFServlet", value = "/LoginFFServlet")
 public class LoginFFServlet extends HttpServlet { // login with facebook
+    // LoginFFServlet.java - Facebook Login Example
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
-        System.out.println(code);
+        if (code == null) {
+            response.sendRedirect("Login.jsp?error=facebookAuthFailed");
+            return;
+        }
+
         FaceLogin faceLogin = new FaceLogin();
         String accessToken = faceLogin.getToken(code);
+
+        if (accessToken == null) {
+            response.sendRedirect("Login.jsp?error=facebookAuthFailed");
+            return;
+        }
+
         HttpSession session = request.getSession();
-
-
         AccountFF ff = faceLogin.getUserInfo(accessToken);
-        System.out.println(ff);
 
-        // Lưu thông tin vào cơ sở dữ liệu
         DBDAO dbdao = new DBDAO();
         AccountFF accountFF = dbdao.checkFacebookAccount(ff.getName());
 
-        if(accountFF != null) {
-            session.setAttribute("facebookUser", ff);
-        }else{
+        if (accountFF != null) {
+            session.setAttribute("facebookUser", accountFF);
+        } else {
             dbdao.saveFaceAccount(ff);
             session.setAttribute("facebookUser", ff);
-
         }
         response.sendRedirect("product");
-
-
     }
+
 }
