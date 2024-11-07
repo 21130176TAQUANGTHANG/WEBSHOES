@@ -21,15 +21,15 @@ public class LoginServlet extends HttpServlet {
             User user = dbdao.checkLogin(email, password);
             HttpSession session = request.getSession();
 
-
+            String error = "Sai tài khoản hoặc mật khẩu";
             if (user != null) {
                 // Đăng nhập thành công
                 session.setAttribute("user", user);
                 response.sendRedirect("product");
             } else {
                 // Đăng nhập thất bại
-                request.setAttribute("error", "Sai tài khoản hoặc mật khẩu");
-                response.sendRedirect("Login.jsp");
+                request.setAttribute("error", error);
+                request.getRequestDispatcher("Login.jsp").forward(request, response); // Sử dụng forward thay vì redirect
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -1,5 +1,8 @@
 package Product;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Product {
     private int productId;
     private String productName;

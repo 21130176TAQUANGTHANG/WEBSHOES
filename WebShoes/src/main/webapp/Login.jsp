@@ -73,6 +73,27 @@
           >
             Tìm kiếm
           </button>
+
+          <c:if test="${sessionScope.user !=null}">
+            <h3>${sessionScope.user.username}</h3>
+            <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+          </c:if>
+
+          <c:if test="${sessionScope.facebookUser !=null}">
+            <h3>${sessionScope.facebookUser.name}</h3>
+            <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+          </c:if>
+
+          <c:if test="${sessionScope.googleUser !=null}">
+            <h3>${sessionScope.googleUser.name}</h3>
+            <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+          </c:if>
+
+
+          <c:if test="${sessionScope.user ==null}">
+            <a href="Login.jsp">Dang nhap</a>
+          </c:if>
+
         </form>
       </div>
     </div>
@@ -96,6 +117,7 @@
           <div class="row gy-5 justify-content-center">
             <div class="col-12 col-lg-5">
               <form action="LoginServlet" method="post">
+                <p class="text-danger">${error}</p>
                 <div class="row gy-3 overflow-hidden">
                   <div class="col-12">
                     <div class="form-floating mb-3">

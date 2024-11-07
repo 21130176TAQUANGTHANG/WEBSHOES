@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
   <title>Chi tiết sản phẩm</title>
@@ -19,6 +21,7 @@
   />
 </head>
 <body>
+
 <header>
   <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
     <div class="container-fluid">
@@ -76,18 +79,19 @@
   <div class="row">
     <!-- Phần hình ảnh sản phẩm -->
     <div class="col-md-6">
-      <img src="" alt="" class="img-fluid">
+      <img src="${product.productImage}" alt="${product.productName}" class="img-fluid">
     </div>
 
     <!-- Phần thông tin chi tiết sản phẩm -->
     <div class="col-md-6">
-      <h4 class="mb-3"></h4>
-      <p>Mã SP: <strong></strong></p>
-      <p class="text-danger h4"><strong>đ</strong></p>
+      <h4 class="mb-3">${product.productName}</h4>
+      <p>Mã SP: <strong>${product.productId}</strong></p>
+      <p class="text-danger h4 price"><strong>${product.productPrice} ₫</strong></p>
+
 
       <form action="AddCartServlet" method="get" onsubmit="return checkSizeSelection()">
         <!-- Thông tin sản phẩm -->
-        <input type="hidden" name="id" value="">
+        <input type="hidden" name="id" value="${product.productId}">
 
         <!-- Chọn size giày -->
         <h5>CHỌN SIZE GIÀY</h5>
@@ -119,7 +123,7 @@
           <label for="quantity" class="form-label">Số lượng:</label>
           <div class="input-group">
             <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity()">-</button>
-            <input type="number" id="quantity" name="quantity" class="form-control text-center" value="1" min="1" max="">
+            <input type="number" id="quantity" name="quantity" class="form-control text-center" value="1" min="1" max="${product.productQuantity}">
             <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity()">+</button>
           </div>
         </div>
@@ -137,6 +141,45 @@
     </div>
   </div>
 </div>
+<script>
+  function checkSizeSelection() {
+    const sizeSelected = document.querySelector('input[name="size"]:checked');
+    if (!sizeSelected) {
+      alert("Vui lòng chọn size giày trước khi thêm vào giỏ hàng.");
+      return false;
+    }
+    return true;
+  }
+
+  function decreaseQuantity() {
+    const quantityInput = document.getElementById('quantity');
+    if (quantityInput.value > 1) {
+      quantityInput.value--;
+    }
+  }
+
+  function increaseQuantity() {
+    const quantityInput = document.getElementById('quantity');
+    const maxQuantity = quantityInput.getAttribute('max');
+    if (quantityInput.value < maxQuantity) {
+      quantityInput.value++;
+    }
+  }
+
+  // Hàm để định dạng giá tiền
+  function formatPrice() {
+    const priceElements = document.querySelectorAll('.price'); // Chọn tất cả phần tử có class "price"
+
+    priceElements.forEach(element => {
+      let price = element.innerText.replace('₫', '').trim(); // Lấy giá trị, loại bỏ "₫"
+      let formattedPrice = parseInt(price).toLocaleString(); // Định dạng giá trị với dấu phẩy
+      element.innerText = formattedPrice + '₫'; // Cập nhật lại giá trị với dấu phẩy và "₫"
+    });
+  }
+
+  // Gọi hàm khi trang được tải
+  window.onload = formatPrice;
+</script>
 
 </body>
 </html>
