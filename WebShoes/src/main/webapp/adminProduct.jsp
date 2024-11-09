@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +32,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.jsp">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -43,7 +44,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="admin.html">
+            <a class="nav-link" href="admin.jsp">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -59,14 +60,14 @@
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="adminProduct.html">
+            <a class="nav-link" href="adminProduct.jsp">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>AdminProduct</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="adminaccount.html">
+            <a class="nav-link" href="adminaccount.jsp">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Tables</span></a>
         </li>
@@ -128,7 +129,18 @@
                             </form>
                         </div>
                     </li>
-
+                    <form
+                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                     <!-- Nav Item - Alerts -->
                     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -169,6 +181,43 @@
             <!-- End of Topbar -->
 
             <!--           code here-->
+            <div class="container mt-5">
+                <h2>Product List</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Product Image</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Size</th>
+                        <th>Color</th>
+                        <th>Brand</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="o" items="${adminproducts}">
+                        <tr>
+                            <td>${o.productId}</td>
+                            <td>${o.productName}</td>
+                            <td>${o.productImage}</td>
+                            <td>${o.productPrice}</td>
+                            <td>${o.productDescription}</td>
+                            <td>${o.productQuantity}</td>
+                            <td>${o.productSize}</td>
+                            <td>${o.productColor}</td>
+                            <td>${o.productLogo}</td>
+
+                        </tr>
+
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
 
         </div>
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<html>
 <head>
 
     <meta charset="utf-8">
@@ -10,7 +12,7 @@
     <meta name="author" content="">
 
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>adminaccount.jsp</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -33,7 +35,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.jsp">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -45,7 +47,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="admin.html">
+            <a class="nav-link" href="admin.jsp">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -61,14 +63,14 @@
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="adminProduct.html">
+            <a class="nav-link" href="adminProduct.jsp">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>AdminProduct</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="adminaccount.html">
+            <a class="nav-link" href="adminaccount.jsp">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Adminaccount</span></a>
         </li>
@@ -194,7 +196,22 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <!-- Dữ liệu từ server -->
+                        <!-- Duyệt qua danh sách người dùng -->
+                        <c:if test="${empty adminUsers}">
+                            <p>No data available</p> <!-- Thông báo nếu không có dữ liệu -->
+                        </c:if>
+                        <c:forEach var="user" items="${adminUsers}">
+                            <tr>
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.password}</td>
+                                <td>${user.phone}</td>
+                                <td>${user.address}</td>
+                                <td>${user.role}</td>
+                            </tr>
+                        </c:forEach>
+
                         </tbody>
                     </table>
                 </div>
@@ -212,6 +229,15 @@
                         </thead>
                         <tbody>
                         <!-- Dữ liệu từ server -->
+
+                        <c:forEach var="o" items="${adminFacebook}">
+                            <tr>
+                                <td>${o.id}</td>
+                                <td>${o.email}</td>
+                                <td>${o.name}</td>
+                            </tr>
+                        </c:forEach>
+
                         </tbody>
                     </table>
                 </div>
@@ -234,6 +260,18 @@
                         </thead>
                         <tbody>
                         <!-- Dữ liệu từ server -->
+                        <c:forEach var="o" items="${adminGoogle}">
+                            <tr>
+                                <th>${o.id}</th>
+                                <th>${o.email}</th>
+                                <th>${o.name}</th>
+                                <th>${o.first_name}</th>
+                                <th>${o.given_name}</th>
+                                <th>${o.family_name}</th>
+                                <th>${o.picture}</th>
+                                <th>${o.verified_email}</th>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -242,12 +280,17 @@
             <script>
                 function showTable(tableId) {
                     // Ẩn tất cả các bảng
-                    document.querySelectorAll('.table-container').forEach(table => {
+                    document.querySelectorAll('.table-container').forEach(function(table) {
                         table.style.display = 'none';
                     });
+
                     // Hiển thị bảng được chọn
-                    document.getElementById(tableId).style.display = 'block';
+                    var table = document.getElementById(tableId);
+                    if (table) {
+                        table.style.display = 'block';
+                    }
                 }
+
             </script>
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

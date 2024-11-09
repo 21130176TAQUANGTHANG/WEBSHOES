@@ -171,6 +171,97 @@ public class DBDAO {
             }
         }
     }
+
+    public List<User> getAllUsers() {
+        List<User>users = new ArrayList<>();
+        String query = "SELECT * FROM login";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User a = new User(rs.getString("id"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getInt("phone"),
+                        rs.getString("address"),
+                        rs.getInt("role"));
+                users.add(a);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return users;
+    }
+    public List<AccountFF> getAllFacebook() {
+        List<AccountFF>ff = new ArrayList<>();
+        String query = "SELECT * FROM faceaccount";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                AccountFF accountFF = new AccountFF(rs.getString("id"),
+                        rs.getString("email"),
+                        rs.getString("name"));
+                ff.add(accountFF);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ff;
+    }
+    public List<GoogleAccount> getAllGoogle() {
+        List<GoogleAccount>gg = new ArrayList<>();
+        String query = "SELECT * FROM googleaccount";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                GoogleAccount googleAccount = new GoogleAccount(rs.getString("id"),
+                        rs.getString("email"),
+                         rs.getString("name"),
+                        rs.getString("first_name"),
+                        rs.getString("given_name"),
+                        rs.getString("family_name"),
+                        rs.getString("picture"),
+                        rs.getBoolean("verified_email"));
+                gg.add(googleAccount);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return gg;
+    }
     public List<Product>getAllProducts() {
         List<Product> products = new ArrayList<Product>();
         String query = "SELECT * FROM product";
@@ -184,7 +275,10 @@ public class DBDAO {
                         rs.getString("productImage"),
                         rs.getInt("productPrice"),
                         rs.getString("productDescription"),
-                        rs.getInt("productquantity"));
+                        rs.getInt("productquantity"),
+                        rs.getString("productSize"),
+                        rs.getString("productColor"),
+                        rs.getString("productLogo"));
 
                 products.add(product);
 
@@ -362,10 +456,9 @@ public class DBDAO {
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-       List<Order> orderList = dbdao.getOrderHistoryByUserId("2");
-       for (Order order : orderList) {
+       List<Product> orderList = dbdao.getAllProducts();
+       for (Product order : orderList) {
            System.out.println(order);
-
        }
     }
 }
