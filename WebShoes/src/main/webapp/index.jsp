@@ -71,11 +71,18 @@
                             Tìm kiếm
                         </button>
                     </form>
-                        
-                    <c:if test="${sessionScope.user !=null}">
-                        <h3>${sessionScope.user.username}</h3>
+
+                    <c:if test="${sessionScope.user != null}">
+                        <h3>Xin chào, ${sessionScope.user.username}</h3>
                         <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+
+                        <!-- Kiểm tra nếu role = 1 (admin) thì hiển thị nút truy cập admin.jsp -->
+                        <c:if test="${sessionScope.user.role == 1}">
+                            <a href="admin.jsp" class="btn btn-primary">Go to Admin Page</a>
+                        </c:if>
+
                     </c:if>
+
 
                     <c:if test="${sessionScope.facebookUser !=null}">
                         <h3>${sessionScope.facebookUser.name}</h3>

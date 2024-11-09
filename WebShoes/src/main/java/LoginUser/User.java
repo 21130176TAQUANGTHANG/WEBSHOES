@@ -10,7 +10,6 @@ public class User implements Serializable {
     private  int phone;
     private String address;
     private  int role;
-    private String googleId;
 
     public User() {
     }
@@ -105,12 +104,5 @@ public class User implements Serializable {
 
     public void setRole(int role) {
         this.role = role;
-    }
-    public String getGoogleId() {
-        return googleId;
-    }
-
-    public void setGoogleId(String googleId) {
-        this.googleId = googleId;
     }
 }
