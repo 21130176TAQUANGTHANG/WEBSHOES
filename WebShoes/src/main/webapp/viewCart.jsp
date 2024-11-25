@@ -128,7 +128,7 @@
         <thead>
         <tr>
             <th>Hình ảnh</th>
-            <th>Sản phẩm</th>
+            <th>Sảnphẩm</th>
             <th>Size</th>
             <th>Giá</th>
             <th>Số lượng</th>
