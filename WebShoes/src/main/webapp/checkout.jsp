@@ -7,11 +7,13 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="LoginUser.GoogleAccount" %>
 <%@ page import="LoginUser.AccountFF" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thông Tin Giao Hàng</title>
+  <title>Thông Tin Giao Hàng(checkout.jsp)</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
@@ -60,6 +62,7 @@
   </style>
 </head>
 <body>
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
         <div class="container-fluid">
@@ -83,17 +86,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="listproduct.jsp">Danh sách sản phẩm</a>
                     </li>
-                    <%
-                        Cart cart = (Cart) session.getAttribute("cart");
-                        if (cart == null)
-                            cart = new Cart();
-
-                    %>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="viewCart.jsp">gio hang <span><%= cart.getTotal()%> </span></i> </a>
-
-
+                        <a class="nav-link" href="viewCart.jsp">Giỏ hàng</a>
                     </li>
                 </ul>
                 <form class="d-flex input-group w-auto me-3">
@@ -113,38 +107,32 @@
                     </button>
                 </form>
 
-                <%
-                    String username = (String) session.getAttribute("username");
-                    GoogleAccount googleUser = (GoogleAccount) session.getAttribute("googleUser"); // Thay đổi thành GoogleAccount
-                    AccountFF facebookUser = (AccountFF) session.getAttribute("facebookUser"); // Lấy đối tượng AccountFF
+                <c:if test="${sessionScope.user != null}">
+                    <h3>Xin chào, ${sessionScope.user.username}</h3>
+                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
 
-                    if (username != null) {
-                %>
-                <span class="navbar-text me-3">Xin chào: <%=username%></span>
-                <a href="LogoutServlet" class="btn btn-danger">Logout</a>
-                <a href="OrderHistory">Lịch sử đơn hàng</a>
-                <%
-                } else if (googleUser != null) {
-                %>
-                <span class="navbar-text me-3">Xin chào: <%=googleUser.getName()%></span>
-                <a href="LogoutServlet" class="btn btn-danger">Logout</a>
-                <a href="OrderHistory">Lịch sử đơn hàng</a>
-                <%
-                } else if (facebookUser != null) { // Kiểm tra đối tượng facebookUser
-                %>
-                <span class="navbar-text me-3">Xin chào: <%=facebookUser.getName()%></span> <!-- Lấy tên từ đối tượng -->
-                <a href="LogoutServlet" class="btn btn-danger">Logout</a>
-                <a href="OrderHistory">Lịch sử đơn hàng</a>
-                <%
-                } else {
-                %>
-                <a href="Login.jsp" class="btn btn-danger">Đăng nhập</a>
-                <%
-                    }
-                %>
+                    <!-- Kiểm tra nếu role = 1 (admin) thì hiển thị nút truy cập admin.jsp -->
+                    <c:if test="${sessionScope.user.role == 1}">
+                        <a href="admin.jsp" class="btn btn-primary">Go to Admin Page</a>
+                    </c:if>
+
+                </c:if>
 
 
+                <c:if test="${sessionScope.facebookUser !=null}">
+                    <h3>${sessionScope.facebookUser.name}</h3>
+                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+                </c:if>
 
+                <c:if test="${sessionScope.googleUser !=null}">
+                    <h3>${sessionScope.googleUser.name}</h3>
+                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+                </c:if>
+
+
+                <c:if test="${sessionScope.user ==null}">
+                    <a href="Login.jsp">Dang nhap</a>
+                </c:if>
             </div>
         </div>
     </nav>

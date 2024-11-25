@@ -8,8 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @WebServlet("/product")
 public class ProductServlet extends HttpServlet {
@@ -20,7 +22,12 @@ public class ProductServlet extends HttpServlet {
 
         List<Integer> bestSellingProductIds = Arrays.asList(100, 101);
         List<Product> products = dao.getProductsByIds(bestSellingProductIds);
-        req.setAttribute("products", products);
+        if (products == null || products.isEmpty()) {
+            req.setAttribute("errorMessage", "Không có sản phẩm nào được tìm thấy.");
+        } else {
+            req.setAttribute("products", products);
+        }
+
         req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 }

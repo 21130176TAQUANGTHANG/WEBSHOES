@@ -382,8 +382,8 @@ public class DBDAO {
 //--------------------------------------------
     // lưu thông tin đăt hàng
 // Lưu thông tin vào bảng Orders
-    public int saveOrder(String userId, int totalPrice, String name, String address, String phone, String paymentMethod, String notes) {
-        String query = "INSERT INTO orders (user_id, total_price, name, address, phone, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int saveOrder(String userId, int totalPrice, String name, String address, String phone, String notes) {
+        String query = "INSERT INTO orders (user_id, total_price, name, address, phone, notes) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -392,8 +392,7 @@ public class DBDAO {
             ps.setString(3, name);
             ps.setString(4, address);
             ps.setString(5, phone);
-            ps.setString(6, paymentMethod);
-            ps.setString(7, notes);
+            ps.setString(6, notes);
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             if (rs.next()) {
@@ -437,7 +436,6 @@ public class DBDAO {
                 order.setUserId(rs.getString("user_id"));
                 order.setTotalPrice(rs.getInt("total_price"));
                 order.setOrderDate(rs.getTimestamp("order_date"));
-                order.setPaymentMethod(rs.getString("payment_method"));
                 order.setNotes(rs.getString("notes"));
                 order.setName(rs.getString("name"));
                 order.setAddress(rs.getString("address"));
@@ -453,12 +451,69 @@ public class DBDAO {
         return orderList;
     }
 
+    // Cập nhật số lượng sản phẩm sau khi đặt hàng
+    public int updateProductAfterOrder(int productId, int quantityOrdered) {
+        String query = "UPDATE product SET productquantity = productquantity - ? WHERE productId = ?";
+        int remainingQuantity = 0;
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, quantityOrdered);
+            ps.setInt(2, productId);
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Sản phẩm đã được cập nhật thành công.");
+
+                // Lấy số lượng sản phẩm còn lại
+                remainingQuantity = checkProductQuantity(productId);
+            } else {
+                System.out.println("Cập nhật thất bại. Có thể sản phẩm không tồn tại.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return remainingQuantity;
+    }
+
+    // Kiểm tra số lượng sản phẩm còn lại
+    public int checkProductQuantity(int productId) {
+        String query = "SELECT productquantity FROM product WHERE productId = ?";
+        int availableQuantity = 0;
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, productId);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                availableQuantity = rs.getInt("productQuantity");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return availableQuantity;
+    }
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-       List<Product> orderList = dbdao.getAllProducts();
-       for (Product order : orderList) {
-           System.out.println(order);
-       }
+//        int a = dbdao.updateProductAfterOrder(100, 2);
+//        System.out.println(a);
     }
 }

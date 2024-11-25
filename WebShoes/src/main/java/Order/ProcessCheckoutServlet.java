@@ -22,11 +22,10 @@ public class ProcessCheckoutServlet extends HttpServlet {
         String name = req.getParameter("name");
         String address = req.getParameter("address");
         String phone = req.getParameter("phone");
-        String paymentMethod = req.getParameter("paymentMethod");
         String notes = req.getParameter("notes");
 
         // Kiểm tra nếu thiếu thông tin nào
-        if (name == null || address == null || phone == null || paymentMethod == null || name.isEmpty() || address.isEmpty() || phone.isEmpty()) {
+        if (name == null || address == null || phone == null || name.isEmpty() || address.isEmpty() || phone.isEmpty()) {
             resp.sendRedirect("checkout.jsp?error=missingInfo");
             return;
         }
@@ -86,7 +85,7 @@ public class ProcessCheckoutServlet extends HttpServlet {
         // Lưu đơn hàng vào cơ sở dữ liệu
         DBDAO dao = new DBDAO();
         int totalPrice = cart.getTotalPrice();
-        int orderId = dao.saveOrder(userId, totalPrice, name, address, phone, paymentMethod, notes);
+        int orderId = dao.saveOrder(userId, totalPrice, name, address, phone, notes);
 
         // Lưu chi tiết đơn hàng
         if (orderId > 0) {

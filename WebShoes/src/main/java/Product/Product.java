@@ -14,6 +14,7 @@ public class Product {
     private String productColor; // color
     private String productLogo; // brand
 
+
     // Constructor for basic product
     public Product(int productId, String productName, String productImage, int productPrice, String productDescription, int productQuantity) {
         this.productId = productId;
@@ -134,4 +135,12 @@ public class Product {
                 ", productLogo='" + productLogo + '\'' +
                 '}';
     }
+
+    // Định dạng giá tiền theo Locale Việt Nam
+    public String getFormatPrice() {
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(localeVN);
+        return currencyFormat.format(this.productPrice);
+    }
+
 }

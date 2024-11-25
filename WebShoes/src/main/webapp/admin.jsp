@@ -98,6 +98,19 @@
                 <span>feedback</span></a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="OrderManagement.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Quản lý đơn hàng</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="editStore.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Giao diện của hàng</span></a>
+        </li>
+
+
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 

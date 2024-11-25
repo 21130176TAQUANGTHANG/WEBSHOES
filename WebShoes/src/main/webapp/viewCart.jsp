@@ -4,6 +4,9 @@
 <%@ page import="Product.Product" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: thang
@@ -14,7 +17,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>cart</title>
+    <title>viewCart.jsp</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Font Awesome -->
     <link
@@ -33,6 +36,78 @@
     />
 </head>
 <body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+        <div class="container-fluid">
+            <button
+                    data-mdb-collapse-init
+                    class="navbar-toggler"
+                    type="button"
+                    data-mdb-target="#navbarTogglerDemo03"
+                    aria-controls="navbarTogglerDemo03"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <i class="fas fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="index.jsp">Trang chủ</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="product">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="listproduct.jsp">Danh sách sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="viewCart.jsp">Giỏ hàng</a>
+                    </li>
+                </ul>
+                <form class="d-flex input-group w-auto me-3">
+                    <input
+                            type="search"
+                            class="form-control"
+                            placeholder="Tìm kiếm"
+                            aria-label="Search"
+                    />
+                    <button
+                            data-mdb-ripple-init
+                            class="btn btn-outline-primary"
+                            type="button"
+                            data-mdb-ripple-color="dark"
+                    >
+                        Tìm kiếm
+                    </button>
+                </form>
+
+                <c:if test="${sessionScope.user != null}">
+                    <h3>Xin chào, ${sessionScope.user.username}</h3>
+                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+
+                    <!-- Kiểm tra nếu role = 1 (admin) thì hiển thị nút truy cập admin.jsp -->
+                    <c:if test="${sessionScope.user.role == 1}">
+                        <a href="admin.jsp" class="btn btn-primary">Go to Admin Page</a>
+                    </c:if>
+                </c:if>
+
+
+                <c:if test="${sessionScope.facebookUser !=null}">
+                    <h3>${sessionScope.facebookUser.name}</h3>
+                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+                </c:if>
+
+                <c:if test="${sessionScope.googleUser !=null}">
+                    <h3>${sessionScope.googleUser.name}</h3>
+                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+                </c:if>
+
+                <c:if test="${sessionScope.user ==null}">
+                    <a href="Login.jsp">Dang nhap</a>
+                </c:if>
+            </div>
+        </div>
+    </nav>
+</header>
 
 <div class="container mt-5">
     <h2 class="text-center">Giỏ hàng của bạn</h2>

@@ -108,6 +108,9 @@
         <section>
             <div class="text-center">
                 <div class="row">
+                    <c:if test="${not empty errorMessage}">
+                        <div class="alert alert-warning">${errorMessage}</div>
+                    </c:if>
 
                     <c:forEach var="product" items="${products}">
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
@@ -132,7 +135,8 @@
                                     <a href="productDetail?productId=${product.productId}" class="text-reset">
                                         <p><c:out value="${product.productName}" /></p>
                                     </a>
-                                    <h6 class="mb-3 price">${product.productPrice}₫</h6>
+
+                                    <h6 class="mb-3 price"><c:out value="${product.formatPrice}" /></h6>
                                 </div>
                             </div>
                         </div>

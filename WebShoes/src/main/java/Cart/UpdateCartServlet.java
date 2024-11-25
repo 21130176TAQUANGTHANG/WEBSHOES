@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.json.JSONObject;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,27 +24,34 @@ public class UpdateCartServlet extends HttpServlet {
             session.setAttribute("cart", cart);
         }
 
-        // Lấy thông tin từ request
         String productIdParam = req.getParameter("productId");
         String quantityParam = req.getParameter("quantity");
+
+        JSONObject jsonResponse = new JSONObject();
 
         if (productIdParam != null && quantityParam != null) {
             try {
                 int productId = Integer.parseInt(productIdParam);
                 int quantity = Integer.parseInt(quantityParam);
 
-                // Cập nhật số lượng sản phẩm trong giỏ hàng
-                cart.update(productId, quantity);
-
-                // Tính lại tổng giá trị giỏ hàng
-                int totalPriceForAllProducts = cart.getTotalPrice();
-
-                // Trả về tổng giá trị giỏ hàng cho AJAX
-                PrintWriter out = resp.getWriter();
-                out.println(totalPriceForAllProducts);
+                if (cart.update(productId, quantity)) {
+                    jsonResponse.put("status", "success");
+                    jsonResponse.put("totalPrice", cart.getTotalPrice());
+                    jsonResponse.put("productQuantity", cart.getProduct(productId).getQuantity());
+                } else {
+                    jsonResponse.put("status", "error");
+                    jsonResponse.put("message", "Cập nhật không thành công");
+                }
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                jsonResponse.put("status", "error");
+                jsonResponse.put("message", "Dữ liệu không hợp lệ");
             }
+        } else {
+            jsonResponse.put("status", "error");
+            jsonResponse.put("message", "Thiếu thông tin sản phẩm");
         }
+
+        resp.setContentType("application/json");
+        resp.getWriter().write(jsonResponse.toString());
     }
 }

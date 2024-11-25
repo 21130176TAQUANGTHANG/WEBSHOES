@@ -182,7 +182,13 @@
 
             <!--           code here-->
             <div class="container mt-5">
-                <h2>Product List</h2>
+                <div class="d-flex justify-content-between p-2 ">
+                    <h2>Product List</h2>
+                    <div>
+
+                        <button type="submit" class="btn btn-success pt-2 pb-2">Add</button>
+                    </div>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -200,7 +206,8 @@
                     <tbody>
                     <c:forEach var="o" items="${adminproducts}">
                         <tr>
-                            <td>${o.productId}</td>
+                            <td>${o.productId} <button type="submit" class="btn btn-warning pt-2 pb-2">Edit</button>
+                            </td>
                             <td>${o.productName}</td>
                             <td>${o.productImage}</td>
                             <td>${o.productPrice}</td>

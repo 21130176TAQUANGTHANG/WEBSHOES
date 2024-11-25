@@ -17,15 +17,20 @@ public class Cart {
     // Phương thức thêm sản phẩm với số lượng và các thuộc tính size, color
     public boolean add(int proid, int quantity, String size) {
         if (data.containsKey(proid)) {
-            return data.get(proid).incri(proid, quantity);
+            if (!data.get(proid).incri(proid, quantity)) {
+                return false; // Không thể thêm do vượt số lượng tồn kho
+            }
+            return true;
         }
         DBDAO dao = new DBDAO();
         Product product = dao.getProductById(proid);
-        if (product == null) return false;
-
+        if (product == null || product.getProductQuantity() <= 0) {
+            return false; // Không thêm được do sản phẩm không hợp lệ
+        }
         data.put(proid, new CartProduct(product, quantity, size));
         return true;
     }
+
 
     // Phương thức thêm sản phẩm mà không yêu cầu size và color
     public boolean add(int proid, int quantity) {

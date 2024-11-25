@@ -40,14 +40,13 @@
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Trang chủ</a>
+            <a class="nav-link active" aria-current="page" href="product">Trang chủ</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="listproduct.jsp">Danh sách sản phẩm</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="#">Giới thiệu</a
-            >
+            <a class="nav-link" href="viewCart.jsp">Giỏ hàng</a>
           </li>
         </ul>
         <form class="d-flex input-group w-auto me-3">
@@ -67,7 +66,32 @@
           </button>
         </form>
 
+        <c:if test="${sessionScope.user != null}">
+          <h3>Xin chào, ${sessionScope.user.username}</h3>
+          <a href="LogoutServlet" class="btn btn-danger">Logout</a>
 
+          <!-- Kiểm tra nếu role = 1 (admin) thì hiển thị nút truy cập admin.jsp -->
+          <c:if test="${sessionScope.user.role == 1}">
+            <a href="admin.jsp" class="btn btn-primary">Go to Admin Page</a>
+          </c:if>
+
+        </c:if>
+
+
+        <c:if test="${sessionScope.facebookUser !=null}">
+          <h3>${sessionScope.facebookUser.name}</h3>
+          <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+        </c:if>
+
+        <c:if test="${sessionScope.googleUser !=null}">
+          <h3>${sessionScope.googleUser.name}</h3>
+          <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+        </c:if>
+
+
+        <c:if test="${sessionScope.user ==null}">
+          <a href="Login.jsp">Dang nhap</a>
+        </c:if>
       </div>
     </div>
   </nav>

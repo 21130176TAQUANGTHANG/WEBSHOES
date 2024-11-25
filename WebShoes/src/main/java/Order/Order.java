@@ -7,7 +7,6 @@ public class Order {
     private String userId;
     private int totalPrice;
     private Timestamp orderDate;
-    private String paymentMethod;
     private String notes;
     private String name;
     private String address;
@@ -16,12 +15,11 @@ public class Order {
     }
 
     // Constructor với đầy đủ tham số
-    public Order(int orderId, String userId, int totalPrice, Timestamp orderDate, String paymentMethod, String notes, String name, String address, String phone) {
+    public Order(int orderId, String userId, int totalPrice, Timestamp orderDate, String notes, String name, String address, String phone) {
         this.orderId = orderId;
         this.userId = userId;
         this.totalPrice = totalPrice;
         this.orderDate = orderDate;
-        this.paymentMethod = paymentMethod;
         this.notes = notes;
         this.name = name;
         this.address = address;
@@ -61,13 +59,6 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
 
     public String getNotes() {
         return notes;
@@ -108,7 +99,6 @@ public class Order {
                 ", userId=" + userId +
                 ", totalPrice=" + totalPrice +
                 ", orderDate=" + orderDate +
-                ", paymentMethod='" + paymentMethod + '\'' +
                 ", notes='" + notes + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
