@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 @WebServlet("/ProcessCheckout")
 public class ProcessCheckoutServlet extends HttpServlet {
     @Override
@@ -46,10 +49,9 @@ public class ProcessCheckoutServlet extends HttpServlet {
         if (user != null) {
             userId = user.getId();
             System.out.println("userId = " + userId);
-
         }
 
-// Kiểm tra nếu người dùng đăng nhập bằng Google
+        // Kiểm tra nếu người dùng đăng nhập bằng Google
         GoogleAccount googleUser = (GoogleAccount) session.getAttribute("googleUser");
         if (googleUser != null) {
             String googleId = googleUser.getId(); // Lấy ID ở dạng String
@@ -62,7 +64,6 @@ public class ProcessCheckoutServlet extends HttpServlet {
                 return;
             }
         }
-
 
         // Kiểm tra nếu người dùng đăng nhập bằng Facebook
         AccountFF facebookUser = (AccountFF) session.getAttribute("facebookUser");
@@ -87,15 +88,31 @@ public class ProcessCheckoutServlet extends HttpServlet {
         int totalPrice = cart.getTotalPrice();
         int orderId = dao.saveOrder(userId, totalPrice, name, address, phone, notes);
 
-        // Lưu chi tiết đơn hàng
+        // Lưu chi tiết đơn hàng và cập nhật số lượng còn lại trong kho
         if (orderId > 0) {
+            // Map lưu thông tin số lượng còn lại
+            Map<Integer, Integer> remainingQuantities = new HashMap<>();
+
             for (CartProduct cartProduct : cart.getData().values()) {
-                dao.saveOrderDetails(orderId, cartProduct.getProduct().getProductId(),
-                        cartProduct.getQuantity(), cartProduct.getSize(), cartProduct.getSubtotal());
+                int productId = cartProduct.getProduct().getProductId();
+                int quantityOrdered = cartProduct.getQuantity();
+                String size = cartProduct.getSize();
+                int subtotal = cartProduct.getSubtotal();
+
+                // Lưu chi tiết đơn hàng
+                dao.saveOrderDetails(orderId, productId, quantityOrdered, size, subtotal);
+
+                // Cập nhật số lượng sản phẩm còn lại trong kho
+                int remainingQuantity = dao.updateProductAfterOrder(productId, quantityOrdered);
+                remainingQuantities.put(productId, remainingQuantity);
             }
+
+            // Đưa remainingQuantities vào request để hiển thị trong JSP
+            req.setAttribute("remainingQuantities", remainingQuantities);
+
             // Sau khi lưu xong, xóa giỏ hàng và chuyển hướng tới trang thông báo thành công
             session.removeAttribute("cart");
-            resp.sendRedirect("orderSuccess.jsp");
+            req.getRequestDispatcher("orderSuccess.jsp").forward(req, resp);
         } else {
             resp.sendRedirect("checkout.jsp?error=orderFailed");
         }

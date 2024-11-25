@@ -453,67 +453,56 @@ public class DBDAO {
 
     // Cập nhật số lượng sản phẩm sau khi đặt hàng
     public int updateProductAfterOrder(int productId, int quantityOrdered) {
-        String query = "UPDATE product SET productquantity = productquantity - ? WHERE productId = ?";
-        int remainingQuantity = 0;
+        int remainingQuantity = checkProductQuantity(productId);
+        if (remainingQuantity < quantityOrdered) {
+            System.out.println("Không đủ số lượng sản phẩm trong kho.");
+            return -1; // Trả về -1 để báo lỗi
+        }
 
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
+        String query = "UPDATE product SET productquantity = productquantity - ? WHERE productId = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, quantityOrdered);
             ps.setInt(2, productId);
 
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated > 0) {
                 System.out.println("Sản phẩm đã được cập nhật thành công.");
-
-                // Lấy số lượng sản phẩm còn lại
                 remainingQuantity = checkProductQuantity(productId);
             } else {
                 System.out.println("Cập nhật thất bại. Có thể sản phẩm không tồn tại.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
         return remainingQuantity;
     }
+
 
     // Kiểm tra số lượng sản phẩm còn lại
     public int checkProductQuantity(int productId) {
         String query = "SELECT productquantity FROM product WHERE productId = ?";
         int availableQuantity = 0;
 
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, productId);
 
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                availableQuantity = rs.getInt("productQuantity");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    availableQuantity = rs.getInt("productquantity");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
         return availableQuantity;
     }
+
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-//        int a = dbdao.updateProductAfterOrder(100, 2);
-//        System.out.println(a);
+        int a = dbdao.updateProductAfterOrder(101, 2);
+        System.out.println(a);
     }
 }
