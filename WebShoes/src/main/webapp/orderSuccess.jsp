@@ -90,7 +90,7 @@
     </c:when>
     <c:otherwise>
 
-      <div class="alert alert-warning text-center">
+      <div class="alert alert-success text-center">
         <h4>Cảm ơn bạn đã mua hàng. Đơn hàng của bạn sẽ được xử lý và giao hàng sớm nhất có thể.!</h4>
         <a href="product" class="btn btn-primary">Tiếp Tục Mua Sắm</a>
       </div>

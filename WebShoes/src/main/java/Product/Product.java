@@ -10,9 +10,9 @@ public class Product {
     private int productPrice; // price
     private String productDescription; // description
     private int productQuantity; // quantity
-    private String productSize; // size
-    private String productColor; // color
-    private String productLogo; // brand
+    private int productSize; // size
+    private int productColor; // color
+    private int productLogo; // brand
 
 
     // Constructor for basic product
@@ -26,7 +26,7 @@ public class Product {
     }
 
     // Constructor for complete product details
-    public Product(int productId, String productName, String productImage, int productPrice, String productDescription, int productQuantity, String productSize, String productColor, String productLogo) {
+    public Product(int productId, String productName, String productImage, int productPrice, String productDescription, int productQuantity, int productSize, int productColor, int productLogo) {
         this.productId = productId;
         this.productName = productName;
         this.productImage = productImage;
@@ -39,7 +39,7 @@ public class Product {
     }
 
     // Constructor for product with size
-    public Product(int productId, String productName, String productImage, int productPrice, int productQuantity, String productSize) {
+    public Product(int productId, String productName, String productImage, int productPrice, int productQuantity, int productSize) {
         this.productId = productId;
         this.productName = productName;
         this.productImage = productImage;
@@ -97,27 +97,27 @@ public class Product {
         this.productQuantity = productQuantity;
     }
 
-    public String getProductSize() {
+    public int getProductSize() {
         return productSize;
     }
 
-    public void setProductSize(String productSize) {
+    public void setProductSize(int productSize) {
         this.productSize = productSize;
     }
 
-    public String getProductColor() {
+    public int getProductColor() {
         return productColor;
     }
 
-    public void setProductColor(String productColor) {
+    public void setProductColor(int productColor) {
         this.productColor = productColor;
     }
 
-    public String getProductLogo() {
+    public int getProductLogo() {
         return productLogo;
     }
 
-    public void setProductLogo(String productLogo) {
+    public void setProductLogo(int productLogo) {
         this.productLogo = productLogo;
     }
 

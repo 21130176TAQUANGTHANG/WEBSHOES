@@ -99,7 +99,7 @@ public class DBDAO {
         return null;
     }
 
-
+    // đăng ký
     public User registerUser(User user) {
         try {
             String query = "INSERT INTO login (username, email, password, phone, address, role) VALUES (?, ?, ?, ?, ?, 0)";
@@ -276,16 +276,18 @@ public class DBDAO {
                         rs.getInt("productPrice"),
                         rs.getString("productDescription"),
                         rs.getInt("productquantity"),
-                        rs.getString("productSize"),
-                        rs.getString("productColor"),
-                        rs.getString("productLogo"));
+                        rs.getInt("productSize"),
+                        rs.getInt("productColor"),
+                        rs.getInt("productLogo"));
 
                 products.add(product);
 
             }
         }catch (Exception e) {
-            throw new RuntimeException();
+            e.printStackTrace(); // Hiển thị stack trace đầy đủ
+            throw new RuntimeException("Error occurred in getAllProducts: " + e.getMessage(), e);
         }
+
         finally {
             try {
                 if (rs != null) rs.close();
@@ -499,10 +501,45 @@ public class DBDAO {
         return availableQuantity;
     }
 
+
+    public Product addProduct(Product product) {
+        String query = "INSERT INTO product (productId, productName, productImage, productPrice, productDescription, productQuantity, productSize, productColor, productLogo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, product.getProductId());
+            ps.setString(2, product.getProductName());
+            ps.setString(3, product.getProductImage());
+            ps.setDouble(4, product.getProductPrice());
+            ps.setString(5, product.getProductDescription());
+            ps.setInt(6, product.getProductQuantity());
+            ps.setInt(7, product.getProductSize());
+            ps.setInt(8, product.getProductColor());
+            ps.setInt(9, product.getProductLogo());
+            ps.executeUpdate();
+            return product; // Trả về đối tượng vừa thêm
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Trả về null nếu có lỗi
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-        int a = dbdao.updateProductAfterOrder(101, 2);
-        System.out.println(a);
+        List<Product>getAllProducts = dbdao.getAllProducts();
+        for (Product product: getAllProducts){
+            System.out.println(product);
+        }
     }
+
 }

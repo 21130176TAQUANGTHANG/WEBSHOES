@@ -11,6 +11,8 @@
     <meta name="author" content="">
 
     <title>SB Admin 2 - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -186,7 +188,7 @@
                     <h2>Product List</h2>
                     <div>
 
-                        <button type="submit" class="btn btn-success pt-2 pb-2">Add</button>
+                        <button type="button" class="btn btn-success pt-2 pb-2" data-bs-toggle="modal" data-bs-target="#addProductModal">Add</button>
                     </div>
                 </div>
                 <table class="table table-bordered">
@@ -200,7 +202,7 @@
                         <th>Quantity</th>
                         <th>Size</th>
                         <th>Color</th>
-                        <th>Brand</th>
+                        <th>Logo</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -239,12 +241,9 @@
         <!-- End of Footer -->
 
     </div>
-    <!-- End of Content Wrapper -->
 
 </div>
-<!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
@@ -269,22 +268,59 @@
     </div>
 </div>
 
-<!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<%--pop up add product--%>
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="AddProductServlet" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="productID" class="form-label">Product Id</label>
+                        <input type="number" class="form-control" id="productID" name="productID" required>
+                    </div>
 
-<!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="js/demo/chart-area-demo.js"></script>
-<script src="js/demo/chart-pie-demo.js"></script>
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="productName" name="productName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productPrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="productPrice" name="productPrice" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="productImage" name="productImage" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription" name="productDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productQuantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="productQuantity" name="productQuantity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productSize" class="form-label">Size</label>
+                        <input type="text" class="form-control" id="productSize" name="productSize" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productColor" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="productColor" name="productColor" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productLogo" class="form-label">Logo</label>
+                        <input type="text" class="form-control" id="productLogo" name="productLogo" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 
