@@ -116,7 +116,7 @@
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <div class="card">
                                 <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
-                                    <img src="${product.productImage}" class="w-100" alt="${product.productName}" />
+                                    <img src="${pageContext.request.contextPath}/image/${product.productImage}" class="w-100" alt="${product.productName}" />
                                     <a href="productDetail?productId=${product.productId}">
                                         <div class="mask">
                                             <div class="d-flex justify-content-start align-items-end h-100">

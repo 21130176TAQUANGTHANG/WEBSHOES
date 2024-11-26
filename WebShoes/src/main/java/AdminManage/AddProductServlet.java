@@ -11,7 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 @WebServlet("/AddProductServlet")
 @MultipartConfig(
@@ -59,22 +61,31 @@ public class AddProductServlet extends HttpServlet {
                 return;
             }
 
-            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // Lấy tên file
-            String uploadPath = getServletContext().getRealPath("") + "image";
-            File uploadDir = new File(uploadPath);
+            Part fileName = req.getPart("productImage");
+            String imageFileFilename = fileName.getSubmittedFileName();
+            System.out.println(imageFileFilename);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir(); // Tạo thư mục nếu chưa tồn tại
+            String uploadPath = "D:\\LTWEB\\WebShoes\\src\\main\\webapp\\image\\" + imageFileFilename;
+            System.out.println( "duong dan" +uploadPath);
+
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(uploadPath);
+                InputStream inputStream = filePart.getInputStream();
+                byte[] buffer = new byte[inputStream.available()];
+                inputStream.read(buffer);
+                fileOutputStream.write(buffer);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }catch (Exception e) {
+                e.printStackTrace();
             }
 
-            // Lưu file
-            filePart.write(uploadPath + File.separator + fileName);
 
 
 
             // Tạo đối tượng Product và thêm vào DB
             DBDAO dao = new DBDAO();
-            Product product = new Product(productID, productName, fileName, productPrice, productDescription, productQuantity, productSize, productColor, productLogo);
+            Product product = new Product(productID, productName, imageFileFilename, productPrice, productDescription, productQuantity, productSize, productColor, productLogo);
             Product addedProduct = dao.addProduct(product);
 
             if (addedProduct != null) {
