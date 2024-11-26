@@ -103,7 +103,7 @@
   <div class="row">
     <!-- Phần hình ảnh sản phẩm -->
     <div class="col-md-6">
-      <img src="${product.productImage}" alt="${product.productName}" class="img-fluid">
+      <img src="${pageContext.request.contextPath}/image/${product.productImage}" alt="${product.productName}" class="img-fluid">
     </div>
 
     <!-- Phần thông tin chi tiết sản phẩm -->

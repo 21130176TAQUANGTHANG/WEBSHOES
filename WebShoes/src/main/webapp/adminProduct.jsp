@@ -208,7 +208,13 @@
                     <tbody>
                     <c:forEach var="o" items="${adminproducts}">
                         <tr>
-                            <td>${o.productId} <button type="submit" class="btn btn-warning pt-2 pb-2">Edit</button>
+                            <td>${o.productId}
+                                <button type="button" class="btn btn-warning pt-2 pb-2" data-bs-toggle="modal" data-bs-target="#editProductModal"
+                                        data-id="${o.productId}" data-name="${o.productName}" data-image="${o.productImage}" data-price="${o.productPrice}"
+                                        data-description="${o.productDescription}" data-quantity="${o.productQuantity}"
+                                        data-size="${o.productSize}" data-color="${o.productColor}" data-logo="${o.productLogo}">
+                                    Edit
+                                </button>
                             </td>
                             <td>${o.productName}</td>
                             <td>${o.productImage}</td>
@@ -333,6 +339,72 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Edit Product -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="EditProductServlet" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="editProductID" name="productID"> <!-- Để lưu trữ ID của sản phẩm cần chỉnh sửa -->
+
+                    <div class="mb-3">
+                        <label for="editProductName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="editProductName" name="productName" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProductImage" class="form-label">Product Image</label>
+                        <input type="file" class="form-control" id="editProductImage" name="productImage">
+                        <!-- Thêm thẻ hiển thị tên file nếu có -->
+                        <div id="fileNameDisplay">
+                            No file selected <!-- Mặc định nếu không có file -->
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProductPrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="editProductPrice" name="productPrice" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProductDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editProductDescription" name="productDescription" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProductQuantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="editProductQuantity" name="productQuantity" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProductSize" class="form-label">Size</label>
+                        <input type="text" class="form-control" id="editProductSize" name="productSize" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProductColor" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="editProductColor" name="productColor" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProductLogo" class="form-label">Logo</label>
+                        <input type="text" class="form-control" id="editProductLogo" name="productLogo" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     // Hiển thị toast khi sản phẩm được thêm thành công
     document.addEventListener("DOMContentLoaded", () => {
@@ -343,7 +415,48 @@
         }
     });
 
+
 </script>
+
+<%--popup edit--%>
+<script>
+    // Khi modal được mở, điền thông tin sản phẩm vào modal
+    document.addEventListener("DOMContentLoaded", function () {
+        var editProductModal = document.getElementById('editProductModal');
+        editProductModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Lấy button nhấn vào
+            var productId = button.getAttribute('data-id');
+            var productName = button.getAttribute('data-name');
+            var productImage = button.getAttribute('data-image');
+            var productPrice = button.getAttribute('data-price');
+            var productDescription = button.getAttribute('data-description');
+            var productQuantity = button.getAttribute('data-quantity');
+            var productSize = button.getAttribute('data-size');
+            var productColor = button.getAttribute('data-color');
+            var productLogo = button.getAttribute('data-logo');
+
+            // Điền thông tin vào các ô input trong modal
+            document.getElementById('editProductID').value = productId;
+            document.getElementById('editProductName').value = productName;
+            document.getElementById('editProductPrice').value = productPrice;
+            document.getElementById('editProductDescription').value = productDescription;
+            document.getElementById('editProductQuantity').value = productQuantity;
+            document.getElementById('editProductSize').value = productSize;
+            document.getElementById('editProductColor').value = productColor;
+            document.getElementById('editProductLogo').value = productLogo;
+
+            // Hiển thị tên file hình ảnh đã chọn (nếu có)
+            var fileNameDisplay = document.getElementById('fileNameDisplay');
+            if (productImage) {
+                fileNameDisplay.textContent = productImage; // Hiển thị tên file
+            } else {
+                fileNameDisplay.textContent = 'No file selected'; // Nếu không có file
+            }
+        });
+    });
+
+</script>
+
 </body>
 
 </html>

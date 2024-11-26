@@ -95,7 +95,7 @@ public class AddProductServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            resp.getWriter().println("Error: " + e.getMessage());
+            resp.getWriter().println("Error: " + e.getMessage()) ;
         }
     }
 

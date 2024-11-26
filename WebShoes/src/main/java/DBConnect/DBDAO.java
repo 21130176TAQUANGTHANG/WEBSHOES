@@ -531,7 +531,29 @@ public class DBDAO {
             }
         }
     }
-
+    public void updateProduct(Product product) {
+        try {
+            conn = new DBContext().getConnection();  // Giả sử bạn có lớp kết nối DB
+            String sql = "UPDATE product SET productName = ?, productImage = ?,productPrice = ?, productDescription = ?, productquantity = ?, productSize = ?, productColor = ?, productLogo = ? WHERE productId = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, product.getProductName());
+            ps.setString(2, product.getProductImage());
+            ps.setInt(3, product.getProductPrice());
+            ps.setString(4, product.getProductDescription());
+            ps.setInt(5, product.getProductQuantity());
+            ps.setInt(6, product.getProductSize());
+            ps.setInt(7, product.getProductColor());
+            ps.setInt(8, product.getProductLogo());
+            ps.setInt(9, product.getProductId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            // Đóng kết nối
+        }
+    }
 
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
