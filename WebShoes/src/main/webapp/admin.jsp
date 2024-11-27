@@ -65,9 +65,9 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="admin.jsp">
+            <a class="nav-link" href="product">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
+                <span>Web store</span></a>
         </li>
 
         <!-- Divider -->

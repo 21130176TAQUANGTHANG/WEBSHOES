@@ -24,7 +24,6 @@ public class EditProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Lấy thông tin từ form
         int productId = Integer.parseInt(req.getParameter("productID"));
-
         String productName = req.getParameter("productName");
         int productPrice = Integer.parseInt(req.getParameter("productPrice"));
         String productDescription = req.getParameter("productDescription");
@@ -33,15 +32,19 @@ public class EditProductServlet extends HttpServlet {
         int productColor = Integer.parseInt(req.getParameter("productColor"));
         int productLogo = Integer.parseInt(req.getParameter("productLogo"));
 
-        // Kiểm tra và xử lý file upload
-        Part filePart = req.getPart("productImage");
-        // Lấy thông tin file từ form
-        String imageFileFilename = "";
-        if (filePart != null) {
-            imageFileFilename = filePart.getSubmittedFileName();
-            String uploadPath = "D:\\LTWEB\\WebShoes\\src\\main\\webapp\\image\\" + imageFileFilename;
+        // Lấy tên file hiện tại từ CSDL
+        DBDAO dbdao = new DBDAO();
+        String currentImageFile = dbdao.getProductImageById(productId);
 
-            // Xử lý lưu file
+        // Kiểm tra và xử lý file upload mới
+        Part filePart = req.getPart("productImage");
+        String newImageFile = currentImageFile; // Mặc định giữ file hiện tại
+        System.out.println("file hien tai:   "+newImageFile);
+        if (filePart != null && filePart.getSize() > 0) {
+            newImageFile = filePart.getSubmittedFileName();
+            String uploadPath = "D:\\LTWEB\\WebShoes\\src\\main\\webapp\\image\\" + newImageFile;
+
+            // Lưu file mới
             try (FileOutputStream fileOutputStream = new FileOutputStream(uploadPath);
                  InputStream inputStream = filePart.getInputStream()) {
                 byte[] buffer = new byte[inputStream.available()];
@@ -53,17 +56,11 @@ public class EditProductServlet extends HttpServlet {
             }
         }
 
-        // Lưu tên file vào request để sử dụng trong modal
-        req.setAttribute("imageFileFilename", imageFileFilename);
-
-
-        // Tạo đối tượng Product và cập nhật sản phẩm
-        Product product = new Product(productId, productName, imageFileFilename, productPrice, productDescription, productQuantity, productSize, productColor, productLogo);
-        DBDAO dbdao = new DBDAO();
+        // Cập nhật sản phẩm với thông tin mới
+        Product product = new Product(productId, productName, newImageFile, productPrice, productDescription, productQuantity, productSize, productColor, productLogo);
         dbdao.updateProduct(product);
 
-        // Sau khi cập nhật xong, chuyển hướng lại trang admin
+        // Chuyển hướng lại trang quản lý
         resp.sendRedirect("AdminProduct");
     }
-
 }

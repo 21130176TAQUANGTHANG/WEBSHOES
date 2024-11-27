@@ -22,6 +22,30 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css"
+            rel="stylesheet"
+    />
 
 </head>
 
@@ -46,14 +70,13 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="admin.jsp">
+            <a class="nav-link" href="product">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
+                <span>Web store</span></a>
         </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
-
 
         <!-- Heading -->
         <div class="sidebar-heading">
@@ -62,16 +85,16 @@
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="adminProduct.jsp">
+            <a class="nav-link" href="AdminProduct">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>AdminProduct</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="adminaccount.jsp">
+            <a class="nav-link" href="AccountADServlet">
                 <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
+                <span>Adminaccount</span></a>
         </li>
 
         <li class="nav-item">
@@ -79,6 +102,19 @@
                 <i class="fas fa-fw fa-table"></i>
                 <span>feedback</span></a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="OrderManagement.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Quản lý đơn hàng</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="editStore.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Giao diện của hàng</span></a>
+        </li>
+
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -104,7 +140,18 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-
+                <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                               aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
@@ -131,18 +178,7 @@
                             </form>
                         </div>
                     </li>
-                    <form
-                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                   aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+
                     <!-- Nav Item - Alerts -->
                     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -182,57 +218,181 @@
             </nav>
             <!-- End of Topbar -->
 
-            <!--           code here-->
-            <div class="container mt-5">
-                <div class="d-flex justify-content-between p-2 ">
-                    <h2>Product List</h2>
-                    <div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
 
-                        <button type="button" class="btn btn-success pt-2 pb-2" data-bs-toggle="modal" data-bs-target="#addProductModal">Add</button>
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                </div>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Earnings (Monthly)</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Earnings (Annual)</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                        </div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="progress progress-sm mr-2">
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                         style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Requests Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Pending Requests</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Product ID</th>
-                        <th>Product Name</th>
-                        <th>Product Image</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        <th>Size</th>
-                        <th>Color</th>
-                        <th>Logo</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="o" items="${adminproducts}">
-                        <tr>
-                            <td>${o.productId}
-                                <button type="button" class="btn btn-warning pt-2 pb-2" data-bs-toggle="modal" data-bs-target="#editProductModal"
-                                        data-id="${o.productId}" data-name="${o.productName}" data-image="${o.productImage}" data-price="${o.productPrice}"
-                                        data-description="${o.productDescription}" data-quantity="${o.productQuantity}"
-                                        data-size="${o.productSize}" data-color="${o.productColor}" data-logo="${o.productLogo}">
-                                    Edit
-                                </button>
-                            </td>
-                            <td>${o.productName}</td>
-                            <td>${o.productImage}</td>
-                            <td>${o.productPrice}</td>
-                            <td>${o.productDescription}</td>
-                            <td>${o.productQuantity}</td>
-                            <td>${o.productSize}</td>
-                            <td>${o.productColor}</td>
-                            <td>${o.productLogo}</td>
 
-                        </tr>
+                <!-- Content Row -->
 
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <div class="row">
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Dropdown Header:</div>
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="myAreaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pie Chart -->
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id=" "
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Dropdown Header:</div>
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-pie pt-4 pb-2">
+                                    <canvas id="myPieChart"></canvas>
+                                </div>
+                                <div class="mt-4 text-center small">
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-primary"></i> Direct
+                                        </span>
+                                    <span class="mr-2">
+                                            <i class="fas fa-circle text-success"></i> Social
+                                        </span>
+                                    <span class="mr-2">
+                                            <i class="fas fa-circle text-info"></i> Referral
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
 
         </div>
 
@@ -247,6 +407,7 @@
         <!-- End of Footer -->
 
     </div>
+    <!-- End of Content Wrapper -->
 
 </div>
 
@@ -360,11 +521,12 @@
                     <div class="mb-3">
                         <label for="editProductImage" class="form-label">Product Image</label>
                         <input type="file" class="form-control" id="editProductImage" name="productImage">
-                        <!-- Thêm thẻ hiển thị tên file nếu có -->
-                        <div id="fileNameDisplay">
-                            No file selected <!-- Mặc định nếu không có file -->
-                        </div>
+                        <small class="form-text text-muted" id="currentFileName">
+                            Current file: <span id="currentFileNameDisplay">No file selected</span>
+                        </small>
                     </div>
+
+
 
                     <div class="mb-3">
                         <label for="editProductPrice" class="form-label">Price</label>
@@ -420,11 +582,14 @@
 
 <%--popup edit--%>
 <script>
-    // Khi modal được mở, điền thông tin sản phẩm vào modal
     document.addEventListener("DOMContentLoaded", function () {
         var editProductModal = document.getElementById('editProductModal');
+
         editProductModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget; // Lấy button nhấn vào
+            if (!button) return;
+
+            // Lấy thông tin sản phẩm từ các thuộc tính data-
             var productId = button.getAttribute('data-id');
             var productName = button.getAttribute('data-name');
             var productImage = button.getAttribute('data-image');
@@ -436,25 +601,25 @@
             var productLogo = button.getAttribute('data-logo');
 
             // Điền thông tin vào các ô input trong modal
-            document.getElementById('editProductID').value = productId;
-            document.getElementById('editProductName').value = productName;
-            document.getElementById('editProductPrice').value = productPrice;
-            document.getElementById('editProductDescription').value = productDescription;
-            document.getElementById('editProductQuantity').value = productQuantity;
-            document.getElementById('editProductSize').value = productSize;
-            document.getElementById('editProductColor').value = productColor;
-            document.getElementById('editProductLogo').value = productLogo;
+            document.getElementById('editProductID').value = productId || '';
+            document.getElementById('editProductName').value = productName || '';
+            document.getElementById('editProductPrice').value = productPrice || '';
+            document.getElementById('editProductDescription').value = productDescription || '';
+            document.getElementById('editProductQuantity').value = productQuantity || '';
+            document.getElementById('editProductSize').value = productSize || '';
+            document.getElementById('editProductColor').value = productColor || '';
+            document.getElementById('editProductLogo').value = productLogo || '';
 
-            // Hiển thị tên file hình ảnh đã chọn (nếu có)
-            var fileNameDisplay = document.getElementById('fileNameDisplay');
+            // Hiển thị tên file hình ảnh hiện tại (nếu có)
+            var fileNameDisplay = document.getElementById('currentFileNameDisplay');
+            fileNameDisplay.textContent = productImage ? productImage : 'No file selected';
+
+            // Tooltip nếu file name quá dài
             if (productImage) {
-                fileNameDisplay.textContent = productImage; // Hiển thị tên file
-            } else {
-                fileNameDisplay.textContent = 'No file selected'; // Nếu không có file
+                fileNameDisplay.setAttribute('title', productImage);
             }
         });
     });
-
 </script>
 
 </body>

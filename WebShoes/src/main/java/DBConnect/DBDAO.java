@@ -501,6 +501,23 @@ public class DBDAO {
         return availableQuantity;
     }
 
+    public String getProductImageById(int productId) {
+        String imageFile = "";
+        String query = "SELECT productImage FROM product WHERE productId = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                imageFile = rs.getString("productImage");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return imageFile;
+    }
+
 
     public Product addProduct(Product product) {
         String query = "INSERT INTO product (productId, productName, productImage, productPrice, productDescription, productQuantity, productSize, productColor, productLogo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
