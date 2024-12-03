@@ -90,7 +90,7 @@
         </div>
     </nav>
 </header>
-
+<%--viewCart.jsp/--%>
 <div class="container mt-5">
     <h2 class="text-center">Giỏ hàng của bạn</h2>
 
@@ -119,7 +119,7 @@
                 <c:set var="totalPriceForAllProducts" value="${totalPriceForAllProducts + cartProduct.subtotal}" />
                 <tr>
                     <form action="RemoveCart" method="post">
-                        <td><img src="${product.productImage}" alt="${product.productName}" class="img-fluid" style="max-height: 100px;"></td>
+                        <td><img src="${pageContext.request.contextPath}/image/${product.productImage}" alt="${product.productName}" class="img-fluid" style="max-height: 100px;"></td>
                         <td>${product.productName}</td>
                         <td>${cartProduct.size}</td>
                         <td><fmt:formatNumber value="${product.productPrice}" type="currency" currencySymbol="₫"/></td>

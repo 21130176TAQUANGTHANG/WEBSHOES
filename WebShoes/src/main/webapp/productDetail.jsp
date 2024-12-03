@@ -164,6 +164,13 @@
       </p>
     </div>
   </div>
+
+  <h3>Thông tin sản phẩm</h3>
+  <div class="">
+    <h3><b>${product.productName}</b></h3>
+    <h2>Mô tả </h2>
+    <p>${product.productDescription}</p>
+  </div>
 </div>
 <script>
   function checkSizeSelection() {

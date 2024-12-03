@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+<%--
+  Created by IntelliJ IDEA.
+  User: thang
+  Date: 12/1/2024
+  Time: 3:33 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<html>
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Dashboard</title>
-
+    <title>Title</title>
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -20,8 +20,22 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <!-- Font Awesome -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css"
+            rel="stylesheet"
+    />
 </head>
-
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -31,7 +45,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.jsp">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -43,14 +57,13 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="admin.html">
+            <a class="nav-link" href="product">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
+                <span>Web store</span></a>
         </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
-
 
         <!-- Heading -->
         <div class="sidebar-heading">
@@ -59,23 +72,36 @@
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="adminProduct.jsp">
+            <a class="nav-link" href="AdminProduct">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>AdminProduct</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="adminaccount.jsp">
+            <a class="nav-link" href="AccountADServlet">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Adminaccount</span></a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="feedback.html">
+            <a class="nav-link" href="feedback.jsp">
                 <i class="fas fa-fw fa-table"></i>
-                <span>Feedback</span></a>
+                <span>feedback</span></a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="OrderManagement.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Quản lý đơn hàng</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="editStore.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Giao diện của hàng</span></a>
+        </li>
+
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -101,7 +127,18 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-
+                <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                               aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
@@ -168,7 +205,57 @@
             </nav>
             <!-- End of Topbar -->
 
-<!--           code here-->
+            <div class="container mt-5">
+                <div class="d-flex justify-content-between p-2">
+                    <h2>Đơn hàng</h2>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>OrderId</th>
+                        <th>UserId</th>
+                        <th>TotalPrice</th>
+                        <th>OrderDate</th>
+                        <th>Notes</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:if test="${empty orderList}">
+                        <tr>
+                            <td colspan="8" style="text-align: center;">No orders found.</td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${not empty orderList}">
+                        <c:forEach var="o" items="${orderList}">
+                            <tr>
+                                <td>${o.orderId}</td>
+                                <td>${o.userId}</td>
+                                <td>${o.totalPrice}</td>
+                                <td>${o.orderDate}</td>
+                                <td>${o.notes}</td>
+                                <td>${o.name}</td>
+                                <td>${o.address}</td>
+                                <td>${o.phone}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:if>
+                    </tbody>
+                </table>
+
+                <!-- Hiển thị nút phân trang -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <c:forEach var="i" begin="1" end="${totalPages}">
+                            <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                <a class="page-link" href="admin_order?page=${i}">${i}</a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </nav>
+            </div>
 
         </div>
 
@@ -186,50 +273,5 @@
     <!-- End of Content Wrapper -->
 
 </div>
-<!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="js/demo/chart-area-demo.js"></script>
-<script src="js/demo/chart-pie-demo.js"></script>
-
 </body>
-
 </html>

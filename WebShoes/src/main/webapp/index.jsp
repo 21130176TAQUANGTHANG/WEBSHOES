@@ -102,7 +102,7 @@
             </div>
         </nav>
     </header>
-
+<%--index.jsp--%>
     <div class="container">
         <!-- Products -->
         <section>

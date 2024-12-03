@@ -64,6 +64,53 @@
         </div>
     </nav>
 </header>
+<%--chu ky dien tu--%>
+<div class="d-flex justify-content-start m-2 ms-5">
+    <!-- Nút để kích hoạt modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+        Tạo chữ ký
+    </button>
+
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="GenerateKeyServlet" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Generate and Save Keys</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Input đường dẫn lưu trữ -->
+                        <label for="folderPath">Folder Path</label>
+                        <input type="text" class="form-control" id="folderPath" name="folderPath"
+                               placeholder="Enter folder path to save keys" required>
+                        <br>
+                        <!-- Hiển thị Public Key -->
+                        <label for="publicKey">Public Key</label>
+                        <input type="text" class="form-control" id="publicKey" name="publicKey"
+                               value="${publicKey != null ? publicKey : ''}" readonly>
+                        <br>
+                        <!-- Hiển thị Private Key -->
+                        <label for="privateKey">Private Key</label>
+                        <input type="text" class="form-control" id="privateKey" name="privateKey"
+                               value="${privateKey != null ? privateKey : ''}" readonly>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Generate and Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ms-5">
+        <label for="takekey">Nạp khóa</label>
+        <input type="file" class="btn btn-primary" id="takekey" name="takekey">
+    </div>
+
+</div>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4 text-primary">Thông Tin Giao Hàng</h2>
@@ -124,6 +171,10 @@
         <button type="submit" class="btn btn-primary btn-block">Thanh Toán</button>
     </form>
 </div>
+<!-- Bootstrap JS và Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
+</body>
 </body>
 </html>

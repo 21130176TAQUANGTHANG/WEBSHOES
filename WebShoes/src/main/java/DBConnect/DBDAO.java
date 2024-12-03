@@ -5,6 +5,7 @@ import LoginUser.GoogleAccount;
 import LoginUser.User;
 import Order.Order;
 import Product.Product;
+import Signature.ClassSignature;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -572,12 +573,106 @@ public class DBDAO {
         }
     }
 
+    public List<Order> getAllOrder(){
+        List<Order> orderList = new ArrayList<Order>();
+
+        try {
+            String query = "SELECT * FROM orders";
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("order_id"),
+                        rs.getString("user_id"),
+                        rs.getInt("total_price"),
+                        rs.getTimestamp("order_date"),
+                        rs.getString("notes"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("phone")
+                );
+                orderList.add(order);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return orderList;
+    }
+    public List<Order> getOrdersByPage(int page, int size) {
+        List<Order> orderList = new ArrayList<>();
+        int offset = (page - 1) * size; // Tính offset cho SQL
+
+        try {
+            String query = "SELECT * FROM orders LIMIT ? OFFSET ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, size);  // Giới hạn số lượng bản ghi mỗi trang
+            ps.setInt(2, offset); // Bắt đầu từ vị trí offset
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("order_id"),
+                        rs.getString("user_id"),
+                        rs.getInt("total_price"),
+                        rs.getTimestamp("order_date"),
+                        rs.getString("notes"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("phone")
+                );
+                orderList.add(order);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return orderList;
+    }
+
+    // Đếm tổng số đơn hàng
+    public int getTotalOrders() {
+        int total = 0;
+        try {
+            String query = "SELECT COUNT(*) FROM orders";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return total;
+    }
+
+    public void saveKey(ClassSignature classSignature){
+        String query = "INSERT INTO signatureorder (userId,publicKey,privateKey, signature) VALUES (?,?,?,?)";
+          try {
+              conn = new DBContext().getConnection();
+                ps = conn.prepareStatement(query);
+                ps.setString(1, classSignature.getUserId());
+                ps.setString(2, classSignature.getPublicKey());
+                ps.setString(3, classSignature.getPrivateKey());
+                ps.setString(4, classSignature.getSignature());
+                ps.executeUpdate();
+          } catch (Exception e) {
+              throw new RuntimeException(e);
+          }
+    }
+
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-        List<Product>getAllProducts = dbdao.getAllProducts();
-        for (Product product: getAllProducts){
-            System.out.println(product);
+        List<Order>getAllOrder = dbdao.getAllOrder();
+        System.out.println("Hiển thị đơn đặt hàng");
+        for (Order order: getAllOrder){
+            System.out.println(order);
         }
     }
 
