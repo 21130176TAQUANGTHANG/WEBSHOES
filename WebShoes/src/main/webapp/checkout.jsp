@@ -76,33 +76,46 @@
             <div class="modal-content">
                 <form action="GenerateKeyServlet" method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Generate and Save Keys</h5>
+                        <h5 class="modal-title" id="myModalLabel">Tạo và lưu key</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Input đường dẫn lưu trữ -->
-                        <label for="folderPath">Folder Path</label>
-                        <input type="text" class="form-control" id="folderPath" name="folderPath"
-                               placeholder="Enter folder path to save keys" required>
-                        <br>
                         <!-- Hiển thị Public Key -->
                         <label for="publicKey">Public Key</label>
-                        <input type="text" class="form-control" id="publicKey" name="publicKey"
-                               value="${publicKey != null ? publicKey : ''}" readonly>
+                        <textarea class="form-control" id="publicKey" name="publicKey" rows="3" readonly>
+                            ${publicKey != null ? publicKey : ''}
+                        </textarea>
                         <br>
                         <!-- Hiển thị Private Key -->
                         <label for="privateKey">Private Key</label>
-                        <input type="text" class="form-control" id="privateKey" name="privateKey"
-                               value="${privateKey != null ? privateKey : ''}" readonly>
+                        <textarea class="form-control" id="privateKey" name="privateKey" rows="3" readonly>
+                            ${privateKey != null ? privateKey : ''}
+                        </textarea>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Generate and Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Tạo Key</button>
                     </div>
                 </form>
+
+                <!-- Nút tải xuống Public Key và Private Key -->
+                <div class="mt-3 d-flex d-flex justify-content-around">
+                    <form action="DownloadKeyServlet" method="post">
+                        <input type="hidden" name="keyType" value="public">
+                        <input type="hidden" name="keyContent" value="${publicKey}">
+                        <button type="submit" class="btn btn-success">Lưu Public Key</button>
+                    </form>
+
+                    <form action="DownloadKeyServlet" method="post">
+                        <input type="hidden" name="keyType" value="private">
+                        <input type="hidden" name="keyContent" value="${privateKey}">
+                        <button type="submit" class="btn btn-warning">Lưu Private Key</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
 
 
     <div class="ms-5">

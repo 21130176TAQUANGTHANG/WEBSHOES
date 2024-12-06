@@ -1,17 +1,16 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.util.Locale" %>
-<%@ page import="LoginUser.User" %>
-<%@ page import="LoginUser.GoogleAccount" %>
-<%@ page import="LoginUser.AccountFF" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: thang
+  Date: 12/5/2024
+  Time: 10:36 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
 <html>
 <head>
-    <title>index.jsp</title>
-    <!-- Font Awesome -->
+    <title>Title</title>
     <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
             rel="stylesheet"
@@ -128,59 +127,53 @@
         </div>
     </nav>
 </header>
-<%--index.jsp--%>
-<div class="container">
-    <!-- Products -->
-    <section>
-        <div class="text-center">
-            <div class="row">
-                <c:if test="${not empty errorMessage}">
-                    <div class="alert alert-warning">${errorMessage}</div>
-                </c:if>
-
-                <c:forEach var="product" items="${products}">
-                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                        <div class="card">
-                            <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
-                                 data-mdb-ripple-color="light">
-                                <img src="${pageContext.request.contextPath}/image/${product.productImage}"
-                                     class="w-100" alt="${product.productName}"/>
-                                <a href="productDetail?productId=${product.productId}">
-                                    <div class="mask">
-                                        <div class="d-flex justify-content-start align-items-end h-100">
-                                            <h5><span class="badge bg-dark ms-2">NEW</span></h5>
-                                        </div>
-                                    </div>
-                                    <div class="hover-overlay">
-                                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="card-body">
-                                <a href="productDetail?productId=${product.productId}" class="text-reset">
-                                    <h5 class="card-title mb-2"><c:out value="${product.productName}"/></h5>
-                                </a>
-                                <a href="productDetail?productId=${product.productId}" class="text-reset">
-                                    <p><c:out value="${product.productName}"/></p>
-                                </a>
-
-                                <h6 class="mb-3 price"><c:out value="${product.formatPrice}"/></h6>
-                            </div>
-                        </div>
-                    </div>
-                </c:forEach>
-
-
-            </div>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Thông tin cá nhân</h2>
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+            <h5>Thông tin tài khoản</h5>
         </div>
-    </section>
+        <div class="card-body">
+            <table class="table table-borderless">
+                <tbody>
+                <!-- Hiển thị thông tin từ session -->
+                <tr>
+                    <th>ID:</th>
+                    <td>${sessionScope.user.id}</td>
+                </tr>
+                <tr>
+                    <th>Họ tên:</th>
+                    <td>${sessionScope.user.username}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>${sessionScope.user.email}</td>
+                </tr>
+                <tr>
+                    <th>Số điện thoại:</th>
+                    <td>${sessionScope.user.phone}</td>
+                </tr>
+                <tr>
+                    <th>Địa chỉ:</th>
+                    <td>${sessionScope.user.address}</td>
+                </tr>
+                <tr>
+                    <th>Vai trò:</th>
+                    <td>
+                        <c:choose>
+                            <c:when test="${sessionScope.user.role == 1}">Quản trị viên</c:when>
+                            <c:otherwise>Người dùng</c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer text-center">
+            <a href="editUserProfile.jsp" class="btn btn-warning">Chỉnh sửa thông tin</a>
+            <a href="LogoutServlet" class="btn btn-danger">Đăng xuất</a>
+        </div>
+    </div>
 </div>
-
-
 </body>
-<!-- MDB -->
-<script
-        type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"
-></script>
 </html>

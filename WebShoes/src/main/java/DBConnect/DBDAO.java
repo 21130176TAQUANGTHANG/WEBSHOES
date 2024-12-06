@@ -669,9 +669,8 @@ public class DBDAO {
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-        List<Order>getAllOrder = dbdao.getAllOrder();
-        System.out.println("Hiển thị đơn đặt hàng");
-        for (Order order: getAllOrder){
+        List<User>getAllUsers = dbdao.getAllUsers();
+        for (User order: getAllUsers){
             System.out.println(order);
         }
     }

@@ -28,12 +28,6 @@ public class GenerateKeyServlet extends HttpServlet {
             req.setAttribute("publicKey", publicKey);
             req.setAttribute("privateKey", privateKey);
 
-            // Ghi các khóa ra file
-            String folderPath = req.getParameter("folderPath"); // Thư mục người dùng nhập
-            if (folderPath != null && !folderPath.isEmpty()) {
-                saveKeyToFile(publicKey, folderPath + File.separator + "publicKey.txt");
-                saveKeyToFile(privateKey, folderPath + File.separator + "privateKey.txt");
-            }
 
             // Điều hướng về trang checkout.jsp (hoặc trang khác nếu cần)
             req.getRequestDispatcher("checkout.jsp").forward(req, resp);
@@ -42,9 +36,5 @@ public class GenerateKeyServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error generating keys: " + e.getMessage());
         }
     }
-    private void saveKeyToFile(String keyContent, String filePath) throws IOException {
-        FileWriter fileWriter = new FileWriter(filePath);
-        fileWriter.write(keyContent);
-        fileWriter.close();
-    }
+
 }
