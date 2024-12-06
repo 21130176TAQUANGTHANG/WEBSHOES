@@ -5,7 +5,6 @@ import LoginUser.GoogleAccount;
 import LoginUser.User;
 import Order.Order;
 import Product.Product;
-import Signature.ClassSignature;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -651,20 +650,7 @@ public class DBDAO {
         return total;
     }
 
-    public void saveKey(ClassSignature classSignature){
-        String query = "INSERT INTO signatureorder (userId,publicKey,privateKey, signature) VALUES (?,?,?,?)";
-          try {
-              conn = new DBContext().getConnection();
-                ps = conn.prepareStatement(query);
-                ps.setString(1, classSignature.getUserId());
-                ps.setString(2, classSignature.getPublicKey());
-                ps.setString(3, classSignature.getPrivateKey());
-                ps.setString(4, classSignature.getSignature());
-                ps.executeUpdate();
-          } catch (Exception e) {
-              throw new RuntimeException(e);
-          }
-    }
+
 
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {

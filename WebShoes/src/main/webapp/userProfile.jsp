@@ -134,46 +134,62 @@
             <h5>Thông tin tài khoản</h5>
         </div>
         <div class="card-body">
-            <table class="table table-borderless">
-                <tbody>
-                <!-- Hiển thị thông tin từ session -->
-                <tr>
-                    <th>ID:</th>
-                    <td>${sessionScope.user.id}</td>
-                </tr>
-                <tr>
-                    <th>Họ tên:</th>
-                    <td>${sessionScope.user.username}</td>
-                </tr>
-                <tr>
-                    <th>Email:</th>
-                    <td>${sessionScope.user.email}</td>
-                </tr>
-                <tr>
-                    <th>Số điện thoại:</th>
-                    <td>${sessionScope.user.phone}</td>
-                </tr>
-                <tr>
-                    <th>Địa chỉ:</th>
-                    <td>${sessionScope.user.address}</td>
-                </tr>
-                <tr>
-                    <th>Vai trò:</th>
-                    <td>
-                        <c:choose>
-                            <c:when test="${sessionScope.user.role == 1}">Quản trị viên</c:when>
-                            <c:otherwise>Người dùng</c:otherwise>
-                        </c:choose>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <!-- Cột bên trái: Bảng thông tin -->
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <!-- Hiển thị thông tin từ session -->
+                        <tr>
+                            <th>ID:</th>
+                            <td>${sessionScope.user.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Họ tên:</th>
+                            <td>${sessionScope.user.username}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>${sessionScope.user.email}</td>
+                        </tr>
+                        <tr>
+                            <th>Số điện thoại:</th>
+                            <td>${sessionScope.user.phone}</td>
+                        </tr>
+                        <tr>
+                            <th>Địa chỉ:</th>
+                            <td>${sessionScope.user.address}</td>
+                        </tr>
+                        <tr>
+                            <th>Vai trò:</th>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${sessionScope.user.role == 1}">Quản trị viên</c:when>
+                                    <c:otherwise>Người dùng</c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cột bên phải: Nội dung bổ sung -->
+                <div class="col-md-6">
+                    <h4>Bảo mật </h4>
+                    <a href="KeyGenerationServlet">Tạo key</a><br>
+                    <a href="keyUpload.jsp">Đã có Key</a>
+
+                </div>
+            </div>
         </div>
+
         <div class="card-footer text-center">
             <a href="editUserProfile.jsp" class="btn btn-warning">Chỉnh sửa thông tin</a>
             <a href="LogoutServlet" class="btn btn-danger">Đăng xuất</a>
         </div>
     </div>
+
+
 </div>
 </body>
 </html>
