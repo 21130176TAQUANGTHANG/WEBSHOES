@@ -1,10 +1,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
-<%@ page import="LoginUser.User" %>
-<%@ page import="LoginUser.GoogleAccount" %>
-<%@ page import="LoginUser.AccountFF" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'vi_VN'}" />
+<fmt:setBundle basename="messages" />
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -35,6 +37,31 @@
 
 </style>
 <body>
+<%
+    Locale locale = (Locale) session.getAttribute("locale");
+    if (locale == null) {
+        locale = new Locale("vi", "VN"); // Ngôn ngữ mặc định là Tiếng Việt
+    }
+    ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+%>
+
+<div class="dropdown me-3 bg-secondary">
+    <button
+            class="btn btn-light dropdown-toggle"
+            type="button"
+            id="languageDropdown"
+            data-mdb-toggle="dropdown"
+            aria-expanded="false"
+    >Chọn ngôn ngữ
+        <c:out value="${bundle.getString('home.title')}" /> <!-- Hiển thị ngôn ngữ hiện tại -->
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li><a class="dropdown-item" href="changeLanguage?lang=vi">Tiếng Việt</a></li>
+        <li><a class="dropdown-item" href="changeLanguage?lang=en">English</a></li>
+    </ul>
+</div>
+
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
         <div class="container-fluid">
@@ -49,20 +76,20 @@
             >
                 <i class="fas fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="index.jsp">Trang chủ</a>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="product">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="listproduct.jsp">Danh sách sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="viewCart.jsp">Giỏ hàng</a>
-                    </li>
-                </ul>
-                <form class="d-flex input-group w-auto me-3">
+            <a class="navbar-brand" href="index.jsp"><%= bundle.getString("home.title") %></a>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="product"><%= bundle.getString("menu.home") %></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="listproduct.jsp"><%= bundle.getString("menu.productList") %></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="viewCart.jsp"><%= bundle.getString("menu.cart") %></a>
+                </li>
+            </ul>
+
+            <form class="d-flex input-group w-auto me-3">
                     <input
                             type="search"
                             class="form-control"
@@ -143,8 +170,7 @@
                         <div class="card">
                             <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
                                  data-mdb-ripple-color="light">
-                                <img src="${pageContext.request.contextPath}/image/${product.productImage}"
-                                     class="w-100" alt="${product.productName}"/>
+                                <img src="${pageContext.request.contextPath}/image/${product.productImage}" class="card-img-top" alt="${product.productName}" style="max-height: 200px; object-fit: cover;">
                                 <a href="productDetail?productId=${product.productId}">
                                     <div class="mask">
                                         <div class="d-flex justify-content-start align-items-end h-100">
@@ -163,12 +189,15 @@
                                 <a href="productDetail?productId=${product.productId}" class="text-reset">
                                     <p><c:out value="${product.productName}"/></p>
                                 </a>
-
-                                <h6 class="mb-3 price"><c:out value="${product.formatPrice}"/></h6>
+                                <h6 class="mb-3">
+                                    <c:out value="${currencySymbol}"/>
+                                    <fmt:formatNumber value="${product.productPrice * exchangeRate}" maxFractionDigits="0" />
+                                </h6>
                             </div>
                         </div>
                     </div>
                 </c:forEach>
+
 
 
             </div>

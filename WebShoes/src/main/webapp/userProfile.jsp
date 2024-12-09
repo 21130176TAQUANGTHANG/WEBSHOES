@@ -178,6 +178,7 @@
                     <h4>Bảo mật </h4>
                     <a href="KeyGenerationServlet">Tạo key</a><br>
                     <a href="keyUpload.jsp">Đã có Key</a>
+                    <a href="">REPORT</a>
 
                 </div>
             </div>

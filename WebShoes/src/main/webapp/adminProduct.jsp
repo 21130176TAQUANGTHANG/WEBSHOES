@@ -229,6 +229,7 @@
                     </div>
                 </div>
                 <table class="table table-bordered">
+                    <thead>
                     <tr>
                         <th>Product ID</th>
                         <th>Product Name</th>
@@ -239,41 +240,37 @@
                         <th>Size</th>
                         <th>Color</th>
                         <th>Brand</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="o" items="${adminproducts}">
                         <tr>
-                            <td>${o.productId}
-                                <button type="button" class="btn btn-warning pt-2 pb-2"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editProductModal"
-                                        data-id="${o.productId}"
-                                        data-name="${o.productName}"
-                                        data-image="${o.productImage}"
-                                        data-price="${o.productPrice}"
-                                        data-description="${o.productDescription}"
-                                        data-quantity="${o.productQuantity}"
-                                        data-size="${o.productSize}"
-                                        data-color="${o.productColor}"
-                                        data-logo="${o.productLogo}">
-                                    Edit
-                                </button>
-                            </td>
+                            <td>${o.productId}</td>
                             <td>${o.productName}</td>
-                            <td>${o.productImage}</td>
-                            <td>${o.productPrice}</td>
+                            <td>
+                                <img src="${pageContext.request.contextPath}/image/${o.productImage}" alt="${o.productName}" style="max-width: 100px; max-height: 100px;">
+                            </td>
+                            <td>${o.formatPrice}</td>
                             <td>${o.productDescription}</td>
                             <td>${o.productQuantity}</td>
                             <td>${o.productSize}</td>
                             <td>${o.productColor}</td>
                             <td>${o.productLogo}</td>
-
+                            <td>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal"
+                                        data-id="${o.productId}" data-name="${o.productName}" data-image="${o.productImage}"
+                                        data-price="${o.productPrice}" data-description="${o.productDescription}"
+                                        data-quantity="${o.productQuantity}" data-size="${o.productSize}"
+                                        data-color="${o.productColor}" data-logo="${o.productLogo}">
+                                    Edit
+                                </button>
+                            </td>
                         </tr>
-
                     </c:forEach>
                     </tbody>
                 </table>
+
             </div>
 
         </div>
