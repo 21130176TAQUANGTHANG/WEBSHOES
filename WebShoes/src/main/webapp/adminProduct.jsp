@@ -106,7 +106,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="OrderManagement.html">
+            <a class="nav-link" href="admin_order">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Quản lý đơn hàng</span></a>
         </li>

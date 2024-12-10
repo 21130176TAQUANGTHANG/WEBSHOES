@@ -11,11 +11,13 @@ public class Order {
     private String name;
     private String address;
     private String phone;
+    private String status;
+
     public Order() {
     }
 
     // Constructor với đầy đủ tham số
-    public Order(int orderId, String userId, int totalPrice, Timestamp orderDate, String notes, String name, String address, String phone) {
+    public Order(int orderId, String userId, int totalPrice, Timestamp orderDate, String notes, String name, String address, String phone , String status) {
         this.orderId = orderId;
         this.userId = userId;
         this.totalPrice = totalPrice;
@@ -24,6 +26,7 @@ public class Order {
         this.name = name;
         this.address = address;
         this.phone = phone;
+        this.status = status;
     }
 
     // Getter và Setter cho các thuộc tính
@@ -92,6 +95,13 @@ public class Order {
         this.phone = phone;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     @Override
     public String toString() {
         return "Order{" +

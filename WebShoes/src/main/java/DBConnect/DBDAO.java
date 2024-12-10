@@ -300,6 +300,10 @@ public class DBDAO {
 
         return products;
     }
+
+
+
+
     // hiển thị chi tiết sản phẩm theo id
     public Product getProductById(int productId) {
         String query = "SELECT * FROM product WHERE productId = ?";
@@ -385,16 +389,18 @@ public class DBDAO {
     // lưu thông tin đăt hàng
 // Lưu thông tin vào bảng Orders
     public int saveOrder(String userId, int totalPrice, String name, String address, String phone, String notes) {
-        String query = "INSERT INTO orders (user_id, total_price, name, address, phone, notes) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO orders (user_id, total_price, order_date, notes, name, address, phone, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, userId); // Sử dụng setLong thay vì setString
+            ps.setString(1, userId);
             ps.setInt(2, totalPrice);
-            ps.setString(3, name);
-            ps.setString(4, address);
-            ps.setString(5, phone);
-            ps.setString(6, notes);
+            ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            ps.setString(4, notes);
+            ps.setString(5, name);
+            ps.setString(6, address);
+            ps.setString(7, phone);
+            ps.setString(8, "Chờ xác nhận");
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             if (rs.next()) {
@@ -405,7 +411,20 @@ public class DBDAO {
         }
         return -1;
     }
-
+    public boolean updateOrderStatus(int orderId, String status){
+        String query = "UPDATE orders SET status = ? WHERE order_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, status); // Trạng thái sẽ được truyền vào
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+            return true; // Cập nhật thành công
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false; // Cập nhật thất bại
+    }
 
 
     public void saveOrderDetails(int orderId, int productId, int quantity, String size, int subtotal) {
@@ -590,7 +609,8 @@ public class DBDAO {
                         rs.getString("notes"),
                         rs.getString("name"),
                         rs.getString("address"),
-                        rs.getString("phone")
+                        rs.getString("phone"),
+                        rs.getString("status")
                 );
                 orderList.add(order);
             }
@@ -604,7 +624,7 @@ public class DBDAO {
         int offset = (page - 1) * size; // Tính offset cho SQL
 
         try {
-            String query = "SELECT * FROM orders LIMIT ? OFFSET ?";
+            String query = "SELECT * FROM orders ORDER BY order_date DESC LIMIT ? OFFSET ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setInt(1, size);  // Giới hạn số lượng bản ghi mỗi trang
@@ -620,7 +640,8 @@ public class DBDAO {
                         rs.getString("notes"),
                         rs.getString("name"),
                         rs.getString("address"),
-                        rs.getString("phone")
+                        rs.getString("phone"),
+                        rs.getString("status")
                 );
                 orderList.add(order);
             }
@@ -655,10 +676,7 @@ public class DBDAO {
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-        List<User>getAllUsers = dbdao.getAllUsers();
-        for (User order: getAllUsers){
-            System.out.println(order);
-        }
+
     }
 
 }

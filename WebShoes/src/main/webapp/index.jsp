@@ -5,7 +5,7 @@
 <%@ page import="java.util.ResourceBundle" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'vi_VN'}" />
+<%--<fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'vi_VN'}" />--%>
 <fmt:setBundle basename="messages" />
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -32,7 +32,7 @@
 <style>
     .dropdown:hover .dropdown-menu {
         display: block;
-        margin-top: 0; /* Tùy chỉnh để menu không bị lệch */
+        margin-top: 0;
     }
 
 </style>
@@ -53,6 +53,7 @@
             data-mdb-toggle="dropdown"
             aria-expanded="false"
     >Chọn ngôn ngữ
+        <%= locale.getDisplayLanguage(locale) %>
         <c:out value="${bundle.getString('home.title')}" /> <!-- Hiển thị ngôn ngữ hiện tại -->
     </button>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
@@ -126,6 +127,16 @@
                                         <i class="fas fa-user-circle me-2"></i>Go to Admin Page
                                     </a>
                                 </c:if>
+                            </li>
+                            <li>
+                                <a href="CustomerOrderServlet" class="dropdown-item">
+                                    <i class="fas fa-user-circle me-2"></i>Đơn hàng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="CustomerHistoryOrder.jsp" class="dropdown-item">
+                                    <i class="fas fa-user-circle me-2"></i>Lịch sử đặt hàng
+                                </a>
                             </li>
 
                             <li>

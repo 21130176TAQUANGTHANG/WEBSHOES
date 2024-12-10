@@ -220,6 +220,8 @@
                         <th>Name</th>
                         <th>Address</th>
                         <th>Phone</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -239,6 +241,16 @@
                                 <td>${o.name}</td>
                                 <td>${o.address}</td>
                                 <td>${o.phone}</td>
+                                <td>${o.status}</td>
+                                <td>
+                                    <c:if test="${o.status eq 'Chờ xác nhận'}">
+                                        <form method="post" action="ConfirmOrderServlet">
+                                            <input type="hidden" name="orderId" value="${o.orderId}" />
+                                            <button type="submit" class="btn btn-success">Xác nhận</button>
+                                        </form>
+                                    </c:if>
+                                </td>
+
                             </tr>
                         </c:forEach>
                     </c:if>

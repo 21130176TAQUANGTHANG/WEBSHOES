@@ -92,7 +92,6 @@ public class ProcessCheckoutServlet extends HttpServlet {
         if (orderId > 0) {
             // Map lưu thông tin số lượng còn lại
             Map<Integer, Integer> remainingQuantities = new HashMap<>();
-
             for (CartProduct cartProduct : cart.getData().values()) {
                 int productId = cartProduct.getProduct().getProductId();
                 int quantityOrdered = cartProduct.getQuantity();
@@ -109,7 +108,6 @@ public class ProcessCheckoutServlet extends HttpServlet {
 
             // Đưa remainingQuantities vào request để hiển thị trong JSP
             req.setAttribute("remainingQuantities", remainingQuantities);
-
             // Sau khi lưu xong, xóa giỏ hàng và chuyển hướng tới trang thông báo thành công
             session.removeAttribute("cart");
             req.getRequestDispatcher("orderSuccess.jsp").forward(req, resp);
