@@ -122,7 +122,7 @@
 
 
                 <c:if test="${sessionScope.user ==null}">
-                    <a href="Login.jsp">Dang nhap</a>
+                    <a href="Login.jsp">Đăng nhập</a>
                 </c:if>
             </div>
         </div>
