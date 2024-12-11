@@ -177,9 +177,9 @@
                 <div class="col-md-6">
                     <h4>Bảo mật </h4>
                     <a href="KeyGenerationServlet">Tạo key</a><br>
-                    <a href="keyUpload.jsp">Đã có Key</a>
-                    <a href="">REPORT</a>
-
+                    <a href="keyUpload.jsp">Đã có Key</a><br>
+                    <h5 style="font-size: 14px;">Nếu bạn bị lộ private key hãy nhấn vào nút dưới đây:</h5>
+                    <a href="reportResult.jsp">REPORT</a>
                 </div>
             </div>
         </div>
