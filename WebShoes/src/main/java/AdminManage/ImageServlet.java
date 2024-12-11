@@ -10,7 +10,7 @@ import java.io.*;
 
 @WebServlet("/image/*")
 public class ImageServlet extends HttpServlet {
-    private static final String IMAGE_DIRECTORY = "D:\\LTWEB\\WebShoes\\image";
+    private static final String IMAGE_DIRECTORY = "C:\\Users\\PC\\Desktop\\Web\\WEBSHOES\\WebShoes\\image";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
