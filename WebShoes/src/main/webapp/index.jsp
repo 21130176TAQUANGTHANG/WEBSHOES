@@ -83,7 +83,7 @@
                     <a class="nav-link active" aria-current="page" href="product"><%= bundle.getString("menu.home") %></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="listproduct.jsp"><%= bundle.getString("menu.productList") %></a>
+                    <a class="nav-link" href="listproduct"><%= bundle.getString("menu.productList") %></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="viewCart.jsp"><%= bundle.getString("menu.cart") %></a>
