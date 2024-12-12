@@ -17,7 +17,7 @@ public class ListProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DBDAO dao = new DBDAO();
+        DBlistproductDAO dao = new DBlistproductDAO();
 
         // Lấy locale từ session
         Locale locale = (Locale) req.getSession().getAttribute("locale");
@@ -27,7 +27,7 @@ public class ListProductServlet extends HttpServlet {
 
         // Đọc ResourceBundle theo locale
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-        List<Product> allProducts = dao.getAllProducts();
+        List<Product> allProducts = dao.getAllProduct();
 
         if (allProducts == null) {
             req.setAttribute("errorMessage", bundle.getString("noProductsFound")); // Dùng ResourceBundle cho thông báo
