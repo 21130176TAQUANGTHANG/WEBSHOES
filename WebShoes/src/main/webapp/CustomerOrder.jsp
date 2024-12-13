@@ -27,6 +27,13 @@
             rel="stylesheet"
     />
 </head>
+<style>
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+
+</style>
 <body>
 <%
     Locale locale = (Locale) session.getAttribute("locale");
@@ -118,7 +125,7 @@
                             </c:if>
                         </li>
                         <li>
-                            <a href="CustomerOrder.jsp" class="dropdown-item">
+                            <a href="CustomerOrderServlet" class="dropdown-item">
                                 <i class="fas fa-user-circle me-2"></i>Đơn hàng
                             </a>
                         </li>
@@ -168,37 +175,106 @@
         </div>
     </div>
 
-    <h2>Thông tin đơn hàng</h2>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>OrderId</th>
-            <th>Ngày đặt hàng</th>
-            <th>Tổng tiền</th>
-            <th>Ghi chú</th>
-            <th>Trạng thái</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:if test="${empty orders}">
+    <!-- Nút chuyển đổi -->
+    <div class="d-flex mb-3">
+        <button class="btn btn-primary me-2" onclick="showPendingOrders()">Chờ xác nhận</button>
+        <button class="btn btn-secondary" onclick="showConfirmedOrders()">Đã xác nhận</button>
+    </div>
+
+    <!-- Bảng đơn hàng chưa xác nhận -->
+    <div id="pending-orders" style="display: block;">
+        <h2>Đơn hàng chưa xác nhận</h2>
+        <table class="table table-bordered">
+            <thead>
             <tr>
-                <td colspan="5" style="text-align: center;">Chưa có đơn hàng nào.</td>
+                <th>OrderId</th>
+                <th>Ngày đặt hàng</th>
+                <th>Tổng tiền</th>
+                <th>Ghi chú</th>
+                <th>Trạng thái</th>
+                <th>In hóa đơn</th>
+                <th>Hủy đơn hàng</th>
             </tr>
-        </c:if>
-        <c:if test="${not empty orders}">
-            <c:forEach var="o" items="${orders}">
+            </thead>
+            <tbody>
+            <c:if test="${empty pendingOrders}">
                 <tr>
-                    <td>${o.orderId}</td>
-                    <td><fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy HH:mm" /></td>
-                    <td><fmt:formatNumber value="${o.totalPrice}" type="currency" currencySymbol="₫" /></td>
-                    <td>${o.notes}</td>
-                    <td>${o.status}</td>
+                    <td colspan="5" style="text-align: center;">Không có đơn hàng nào chưa xác nhận.</td>
                 </tr>
-            </c:forEach>
-        </c:if>
-        </tbody>
-    </table>
+            </c:if>
+            <c:if test="${not empty pendingOrders}">
+                <c:forEach var="o" items="${pendingOrders}">
+                    <tr>
+                        <td>${o.orderId}</td>
+                        <td><fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy HH:mm" /></td>
+                        <td><fmt:formatNumber value="${o.totalPrice}" type="currency" currencySymbol="₫" /></td>
+                        <td>${o.notes}</td>
+                        <td>${o.status}</td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/downloadBill" method="GET">
+                                <input type="hidden" name="orderId" value="${o.orderId}">
+                                <button type="submit" class="btn btn-success">In hóa đơn</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/cancelOrder" method="POST">
+                                <input type="hidden" name="orderId" value="${o.orderId}">
+                                <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </c:if>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bảng đơn hàng đã xác nhận -->
+    <div id="confirmed-orders" style="display: none;">
+        <h2>Đơn hàng đã xác nhận</h2>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>OrderId</th>
+                <th>Ngày đặt hàng</th>
+                <th>Tổng tiền</th>
+                <th>Ghi chú</th>
+                <th>Trạng thái</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:if test="${empty confirmedOrders}">
+                <tr>
+                    <td colspan="5" style="text-align: center;">Không có đơn hàng nào đã xác nhận.</td>
+                </tr>
+            </c:if>
+            <c:if test="${not empty confirmedOrders}">
+                <c:forEach var="o" items="${confirmedOrders}">
+                    <tr>
+                        <td>${o.orderId}</td>
+                        <td><fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy HH:mm" /></td>
+                        <td><fmt:formatNumber value="${o.totalPrice}" type="currency" currencySymbol="₫" /></td>
+                        <td>${o.notes}</td>
+                        <td>${o.status}</td>
+                    </tr>
+                </c:forEach>
+            </c:if>
+            </tbody>
+        </table>
+    </div>
 </div>
+<script>
+    function showPendingOrders() {
+        document.getElementById("pending-orders").style.display = "block";
+        document.getElementById("confirmed-orders").style.display = "none";
+    }
+
+    function showConfirmedOrders() {
+        document.getElementById("pending-orders").style.display = "none";
+        document.getElementById("confirmed-orders").style.display = "block";
+    }
+</script>
+
 
 </body>
 </html>

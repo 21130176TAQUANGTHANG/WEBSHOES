@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.*;
 import java.util.Base64;
+import java.sql.Timestamp;
+
 
 @WebServlet("/KeyGenerationServlet")
 public class KeyGenerationServlet extends HttpServlet {
@@ -41,7 +43,7 @@ public class KeyGenerationServlet extends HttpServlet {
         }
 
         if (userId == null) {
-            resp.sendRedirect("checkout.jsp?error=noUser");
+            resp.sendRedirect("");
             return;
         }
 
@@ -68,19 +70,20 @@ public class KeyGenerationServlet extends HttpServlet {
             // Chuyển đổi Public Key sang Base64
             String encodedPublicKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
             req.setAttribute("publicKey", encodedPublicKey);
+            req.getSession().setAttribute("publicKey", publicKey);
+
 
             // Mã hóa Private Key và lưu vào session
             String encodedPrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
             req.setAttribute("privateKey", encodedPrivateKey);
             req.getSession().setAttribute("privateKey", privateKey);
 
+            // Thời gian hiện tại làm createTime
+            Timestamp createTime = new Timestamp(System.currentTimeMillis());
+            Timestamp endTime = null; // ban đầu là null
+
             // Lưu Public Key vào Database
-            db.savePublicKeyToDatabase(userId, encodedPublicKey);
-
-            System.out.println("Public Key: " + encodedPublicKey);
-            System.out.println("Private Key: " + encodedPrivateKey);
-            System.out.println("Private Key lưu vào session: " + privateKey);
-
+            db.savePublicKeyToDatabase(userId, encodedPublicKey, createTime, endTime);
 
             // Chuyển hướng đến trang hiển thị kết quả
             req.getRequestDispatcher("keyResult.jsp").forward(req, resp);

@@ -116,7 +116,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <!-- Hiển thị thông tin cá nhân -->
                             <li>
-                                <a class="dropdown-item" href="userProfile.jsp">
+                                <a class="dropdown-item" href="userProfileServlet">
                                     <i class="fas fa-user-circle me-2"></i>Thông tin cá nhân
                                 </a>
                             </li>

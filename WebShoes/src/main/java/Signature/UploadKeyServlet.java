@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 
 @WebServlet("/UploadKeyServlet")
 @MultipartConfig
@@ -62,7 +63,10 @@ public class UploadKeyServlet extends HttpServlet {
             }
             try {
                 DbSecurity db = new DbSecurity();
-                db.savePublicKeyToDatabase(userId, publicKey);
+                // Thời gian hiện tại làm createTime
+                Timestamp createTime = new Timestamp(System.currentTimeMillis());
+                Timestamp endTime = null; // ban đầu là null
+//                db.savePublicKeyToDatabase(userId, publicKey );
                 resp.getWriter().write("Cặp key đã được tải lên thành công!");
             } catch (Exception e) {
                 e.printStackTrace();

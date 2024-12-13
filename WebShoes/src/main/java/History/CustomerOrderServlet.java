@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 @WebServlet("/CustomerOrderServlet")
 public class CustomerOrderServlet  extends HttpServlet {
@@ -38,7 +39,7 @@ public class CustomerOrderServlet  extends HttpServlet {
                 userId = googleId; // Lưu googleId mà không cần chuyển đổi
                 System.out.println("userIdGG = " + userId);
             } else {
-                resp.sendRedirect("checkout.jsp?error=invalidGoogleId");
+                resp.sendRedirect("");
                 return;
             }
         }
@@ -50,21 +51,27 @@ public class CustomerOrderServlet  extends HttpServlet {
                 userId = facebookUser.getId();
                 System.out.println("userIdFF = " + userId);
             } catch (NumberFormatException e) {
-                resp.sendRedirect("checkout.jsp?error=invalidFacebookId");
+                resp.sendRedirect("");
                 return;
             }
         }
 
         // Đảm bảo rằng userId không phải là null
         if (userId == null) {
-            resp.sendRedirect("checkout.jsp?error=noUser");
+            resp.sendRedirect("");
             return;
         }
         Dbhistory dao = new Dbhistory();
+
         User userhis = dao.getUserById(userId); // Lấy thông tin cá nhân
-        List<Order> orders = dao.getOrdersByUserId(userId); // Lấy danh sách đơn hàng
+
+        List<Order> allOrders = dao.getOrdersByUserId(userId);
+        List<Order> pendingOrders = dao.getPendingOrdersByUserId(userId);
+        List<Order> confirmedOrders = dao.getConfirmedOrdersByUserId(userId);
+
         req.setAttribute("user", userhis);
-        req.setAttribute("orders", orders);
+        req.setAttribute("pendingOrders", pendingOrders);
+        req.setAttribute("confirmedOrders", confirmedOrders);
 
         req.getRequestDispatcher("CustomerOrder.jsp").forward(req, resp);
     }

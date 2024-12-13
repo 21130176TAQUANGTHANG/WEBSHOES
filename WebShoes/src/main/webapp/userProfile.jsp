@@ -176,10 +176,15 @@
                 <!-- Cột bên phải: Nội dung bổ sung -->
                 <div class="col-md-6">
                     <h4>Bảo mật </h4>
-                    <a href="KeyGenerationServlet">Tạo key</a><br>
-                    <a href="keyUpload.jsp">Đã có Key</a>
-                    <a href="">REPORT</a>
-
+                    <c:choose>
+                        <c:when test="${userHasKey}">
+                            <p class="text-muted">Bạn đã có key. Nếu muốn thay thế, hãy tải lên key mới.</p>
+                            <a href="keyUpload.jsp"><i class="fas fa-upload"></i> Đã có Key</a><br>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="KeyGenerationServlet"><i class="fas fa-key"></i> Tạo key</a><br>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
