@@ -185,6 +185,10 @@
                             <a href="KeyGenerationServlet"><i class="fas fa-key"></i> Tạo key</a><br>
                         </c:otherwise>
                     </c:choose>
+                    <a href="KeyGenerationServlet">Tạo key</a><br>
+                    <a href="keyUpload.jsp">Đã có Key</a><br>
+                    <h5 style="font-size: 14px;">Nếu bạn bị lộ private key hãy nhấn vào nút dưới đây:</h5>
+                    <a href="reportResult.jsp">REPORT</a>
                 </div>
             </div>
         </div>

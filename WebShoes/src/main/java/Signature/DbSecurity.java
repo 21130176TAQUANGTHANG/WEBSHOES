@@ -6,11 +6,16 @@ import Order.OrderItem;
 
 import java.io.PrintWriter;
 import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DbSecurity {
     Connection conn;
     PreparedStatement ps;
     ResultSet rs;
+
 
     public boolean hasKey(String userId) {
         String query = "SELECT publicKey FROM users WHERE userId=?";
@@ -39,8 +44,7 @@ public class DbSecurity {
     }
 
 
-
-    public void savePublicKeyToDatabase(String userId, String publicKey,  Timestamp createTime, Timestamp endTime) {
+    public void savePublicKeyToDatabase(String userId, String publicKey, Timestamp createTime, Timestamp endTime) {
         try {
             String query = "INSERT INTO users (userId, publicKey, createTime, endTime) VALUES (?, ?, ?, ?)";
             conn = new DBContext().getConnection();
@@ -49,6 +53,19 @@ public class DbSecurity {
             ps.setString(2, publicKey);
             ps.setTimestamp(3, createTime);
             ps.setTimestamp(4, endTime); // ban đầu là null
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void savePublicKeyToDatabase(String userId, String publicKey) {
+        try {
+            String query = "INSERT INTO users (userId, publicKey) VALUES (?, ?)";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            ps.setString(2, publicKey);
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -88,7 +105,21 @@ public class DbSecurity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    return null;
+        return null;
+    }
+
+    public void updateKeyEndTime(String userId) {
+        String query = "UPDATE users SET endTime = CURRENT_TIMESTAMP WHERE userId = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            closeResources();
+        }
     }
 
     // Phương thức in hóa đơn chứa thông tin sản phẩm
@@ -148,6 +179,7 @@ public class DbSecurity {
             closeResources();
         }
     }
+
     private void printOrder(Order order, PrintWriter writer) {
         writer.println("========== HÓA ĐƠN ==========");
         writer.println("Tên khách hàng: " + order.getName());
@@ -183,10 +215,6 @@ public class DbSecurity {
             throw new RuntimeException("Error closing database resources", e);
         }
     }
-    public static void main(String[] args) {
-        DbSecurity db = new DbSecurity();
-        int orderid = 27;
-        PrintWriter writer = new PrintWriter(System.out);
-        db.getOrdersByUserId(orderid, writer);
-    }
+
+
 }
