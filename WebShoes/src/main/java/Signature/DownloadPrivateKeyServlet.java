@@ -17,23 +17,28 @@ public class DownloadPrivateKeyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Lấy PrivateKey từ session
-        PrivateKey privateKey = (PrivateKey) req.getSession().getAttribute("privateKey");
-        if (privateKey == null) {
-            resp.getWriter().write("Không tìm thấy Private Key!");
+        Object privateKeyObj = req.getSession().getAttribute("privateKey");
+        if (!(privateKeyObj instanceof PrivateKey)) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Không tìm thấy hoặc Private Key không hợp lệ!");
             return;
         }
 
-        // Chuyển đổi PrivateKey sang Base64
-        String encodedPrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+        PrivateKey privateKey = (PrivateKey) privateKeyObj;
 
-        // Đặt tiêu đề tải về, đổi tên file thành privateKey.txt
-        resp.setContentType("text/plain");
-        resp.setHeader("Content-Disposition", "attachment;filename=privateKey.txt");
+        // Lấy dữ liệu private key ở dạng nhị phân (encoded)
+        byte[] privateKeyData = privateKey.getEncoded();
+
+        // Đặt tiêu đề tải về, đổi tên file thành privateKey.der
+        resp.setContentType("application/octet-stream");  // Kiểu MIME cho tệp nhị phân
+        resp.setHeader("Content-Disposition", "attachment;filename=privateKey.der");
 
         // Ghi dữ liệu ra file tải về
         try (OutputStream out = resp.getOutputStream()) {
-            out.write(encodedPrivateKey.getBytes());
+            out.write(privateKeyData);  // Ghi dữ liệu nhị phân trực tiếp
             out.flush();
+        } catch (IOException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi khi ghi dữ liệu Private Key!");
         }
     }
 }
+

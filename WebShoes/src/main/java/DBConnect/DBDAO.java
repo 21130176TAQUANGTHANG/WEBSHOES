@@ -98,6 +98,28 @@ public class DBDAO {
         }
         return null;
     }
+    public boolean isEmailOrUsernameTaken(String email, String username) {
+        String query = "SELECT 1 FROM login WHERE email = ? OR username = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, username);
+            rs = ps.executeQuery();
+            return rs.next(); // Nếu có kết quả, nghĩa là email hoặc username đã tồn tại
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     // đăng ký
     public User registerUser(User user) {
@@ -610,7 +632,8 @@ public class DBDAO {
                         rs.getString("name"),
                         rs.getString("address"),
                         rs.getString("phone"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getString("signature")
                 );
                 orderList.add(order);
             }
@@ -641,7 +664,8 @@ public class DBDAO {
                         rs.getString("name"),
                         rs.getString("address"),
                         rs.getString("phone"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getString("signature")
                 );
                 orderList.add(order);
             }
@@ -676,6 +700,10 @@ public class DBDAO {
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
+        List<Order>orderList = dbdao.getAllOrder();
+        for (Order order : orderList){
+            System.out.println(order);
+        }
 
     }
 

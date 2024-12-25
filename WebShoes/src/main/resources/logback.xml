@@ -1,0 +1,15 @@
+<configuration>
+    <!-- Cấu hình logger cho ứng dụng -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>C:\Users\thang\OneDrive\Desktop\server.log</file> <!-- Đường dẫn tới file log -->
+        <append>true</append> <!-- Ghi đè log hoặc thêm log mới vào cuối file -->
+        <layout>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %p - %c{1} - %m%n</pattern> <!-- Định dạng log -->
+        </layout>
+    </appender>
+
+    <!-- Cấu hình root logger -->
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

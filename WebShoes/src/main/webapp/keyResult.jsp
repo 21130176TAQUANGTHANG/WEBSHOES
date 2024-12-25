@@ -147,7 +147,7 @@
     </div>
     <div class="card-footer d-flex justify-content-between">
       <!-- Nút tải xuống Public Key -->
-      <a href="downloadPublicKey" class="btn btn-success">Tải xuống Public Key</a>
+<%--      <a href="downloadPublicKey" class="btn btn-success">Tải xuống Public Key</a>--%>
 
       <!-- Nút tải xuống Private Key -->
       <a href="downloadPrivateKey" class="btn btn-primary">Tải xuống Private Key</a>

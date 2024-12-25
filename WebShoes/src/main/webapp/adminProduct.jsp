@@ -50,6 +50,15 @@
     />
 
 </head>
+<style>
+    /* Thêm vào phần CSS của bạn */
+    .product-description {
+        max-height: 100px; /* Chiều cao tối đa của ô mô tả */
+        overflow-y: auto; /* Hiển thị thanh cuộn dọc khi cần thiết */
+        white-space: normal; /* Cho phép text xuống dòng */
+    }
+
+</style>
 
 <body id="page-top">
 
@@ -252,7 +261,7 @@
                                 <img src="${pageContext.request.contextPath}/image/${o.productImage}" alt="${o.productName}" style="max-width: 100px; max-height: 100px;">
                             </td>
                             <td>${o.formatPrice}</td>
-                            <td>${o.productDescription}</td>
+                            <td class="product-description">${o.productDescription}</td>
                             <td>${o.productQuantity}</td>
                             <td>${o.productSize}</td>
                             <td>${o.productColor}</td>

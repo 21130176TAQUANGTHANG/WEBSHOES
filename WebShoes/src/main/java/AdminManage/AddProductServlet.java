@@ -65,7 +65,7 @@ public class AddProductServlet extends HttpServlet {
             String imageFileFilename = fileName.getSubmittedFileName();
             System.out.println(imageFileFilename);
 
-            String uploadPath = "D:\\LTWEB\\WebShoes\\src\\main\\webapp\\image\\" + imageFileFilename;
+            String uploadPath = "D:\\LTWEB\\WebShoes\\image\\" + imageFileFilename;
             System.out.println( "duong dan" +uploadPath);
 
             try {

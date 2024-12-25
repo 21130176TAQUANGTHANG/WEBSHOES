@@ -91,7 +91,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="OrderManagement.html">
+            <a class="nav-link" href="admin_order">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Quản lý đơn hàng</span></a>
         </li>
@@ -100,6 +100,12 @@
             <a class="nav-link" href="editStore.html">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Giao diện của hàng</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="VerifySignatureServlet">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Kiểm tra chữ ký điện tử</span></a>
         </li>
 
 
@@ -250,7 +256,6 @@
                                         </form>
                                     </c:if>
                                 </td>
-
                             </tr>
                         </c:forEach>
                     </c:if>

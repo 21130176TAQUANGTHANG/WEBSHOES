@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>KeyUpload.jsp</title>
   <link
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
           rel="stylesheet"
@@ -120,18 +120,27 @@
 </header>
 
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Tải lên cặp Key</h2>
-  <form action="UploadKeyServlet" method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="privateKey" class="form-label">Private Key:</label>
-      <input type="file" class="form-control" id="privateKey" name="privateKey" required />
-    </div>
-    <div class="mb-3">
-      <label for="publicKey" class="form-label">Public Key:</label>
-      <input type="file" class="form-control" id="publicKey" name="publicKey" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Tải lên</button>
-  </form>
+  <h4>Bảo mật</h4>
+  <c:if test="${userHasKey}">
+    <h5>Đã có Key, vui lòng tải lên để xác nhận</h5>
+    <form action="uploadKey" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="publicKeyFile">Chọn Public Key:</label>
+        <input type="file" class="form-control" name="publicKeyFile" id="publicKeyFile" accept=".txt" required />
+      </div>
+      <button type="submit" class="btn btn-success">Tải lên Key</button>
+    </form>
+  </c:if>
+
+  <!-- Thông báo -->
+  <c:if test="${not empty successMessage}">
+    <div class="alert alert-success mt-3">${successMessage}</div>
+  </c:if>
+  <c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger mt-3">${errorMessage}</div>
+  </c:if>
 </div>
+
+
 </body>
 </html>

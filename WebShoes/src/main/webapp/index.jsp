@@ -77,7 +77,7 @@
             >
                 <i class="fas fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="index.jsp"><%= bundle.getString("home.title") %></a>
+            <a class="navbar-brand" href="product"><%= bundle.getString("home.title") %></a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="product"><%= bundle.getString("menu.home") %></a>

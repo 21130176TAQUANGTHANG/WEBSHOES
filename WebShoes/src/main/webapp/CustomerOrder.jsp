@@ -73,13 +73,13 @@
             >
                 <i class="fas fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="index.jsp"><%= bundle.getString("home.title") %></a>
+            <a class="navbar-brand" href="product"><%= bundle.getString("home.title") %></a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="product"><%= bundle.getString("menu.home") %></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="listproduct.jsp"><%= bundle.getString("menu.productList") %></a>
+                    <a class="nav-link" href="listproduct"><%= bundle.getString("menu.productList") %></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="viewCart.jsp"><%= bundle.getString("menu.cart") %></a>
@@ -112,7 +112,7 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <!-- Hiển thị thông tin cá nhân -->
                         <li>
-                            <a class="dropdown-item" href="userProfile.jsp">
+                            <a class="dropdown-item" href="userProfileServlet">
                                 <i class="fas fa-user-circle me-2"></i>Thông tin cá nhân
                             </a>
                         </li>
@@ -184,6 +184,12 @@
     <!-- Bảng đơn hàng chưa xác nhận -->
     <div id="pending-orders" style="display: block;">
         <h2>Đơn hàng chưa xác nhận</h2>
+
+        <c:if test="${errorOrderId != null && o.orderId == errorOrderId}">
+            <div class="alert alert-danger">${uploadMessage}</div>
+        </c:if>
+
+
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -194,6 +200,7 @@
                 <th>Trạng thái</th>
                 <th>In hóa đơn</th>
                 <th>Hủy đơn hàng</th>
+                <th>Tải hóa đơn chữ ký</th>
             </tr>
             </thead>
             <tbody>
@@ -221,6 +228,24 @@
                                 <input type="hidden" name="orderId" value="${o.orderId}">
                                 <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
                             </form>
+                        </td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/UploadInvoiceServlet" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="orderId" value="${o.orderId}">
+
+                                <!-- Tải lên file nội dung (không bao gồm chữ ký) -->
+                                <label for="signatureFilehash">Upload file nội dung (Không bao gồm chữ ký):</label>
+                                <input type="file" name="signatureFilehash" id="signatureFilehash" required>
+
+                                <!-- Tải lên file chữ ký -->
+                                <label for="signatureFile">Upload file chữ ký:</label>
+                                <input type="file" name="signatureFile" id="signatureFile" required>
+
+                                <!-- Nút xác nhận -->
+                                <button type="submit">Confirm and Upload</button>
+                            </form>
+
+
                         </td>
                     </tr>
                 </c:forEach>
