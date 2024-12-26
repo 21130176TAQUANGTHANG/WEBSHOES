@@ -1,13 +1,10 @@
 package Signature;
 
 import DBConnect.DBContext;
-<<<<<<< HEAD
 import Order.Order;
 import Order.OrderItem;
 import java.io.PrintWriter;
-=======
 
->>>>>>> 412e5d96291edcac686528a00b457c490c07db2c
 import java.sql.*;
 
 
@@ -16,7 +13,6 @@ public class DbSecurity {
     PreparedStatement ps;
     ResultSet rs;
 
-<<<<<<< HEAD
     public Order getOrderByIdss(int orderId) {
         Order order = null;
         try  {
@@ -74,9 +70,7 @@ public class DbSecurity {
     }
 
 
-=======
     // Lưu public key vào cơ sở dữ liệu
->>>>>>> 412e5d96291edcac686528a00b457c490c07db2c
     public void savePublicKeyToDatabase(String userId, String publicKey, Timestamp createTime, Timestamp endTime) {
         try {
             String query = "INSERT INTO users (userId, publicKey, createTime, endTime) VALUES (?, ?, ?, ?)";
@@ -85,21 +79,15 @@ public class DbSecurity {
             ps.setString(1, userId);
             ps.setString(2, publicKey);
             ps.setTimestamp(3, createTime);
-<<<<<<< HEAD
             ps.setTimestamp(4, endTime); // ban đầu là null
-=======
             ps.setTimestamp(4, endTime); // endTime có thể là null nếu là khóa mới
->>>>>>> 412e5d96291edcac686528a00b457c490c07db2c
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-<<<<<<< HEAD
-=======
     // Kiểm tra nếu người dùng đã có public key
->>>>>>> 412e5d96291edcac686528a00b457c490c07db2c
     public boolean isPublicKeyExist(String userId) {
         String query = "SELECT COUNT(*) FROM users WHERE userId = ? AND endTime IS NULL";
         try {
@@ -181,7 +169,6 @@ public class DbSecurity {
     }
     public void deleteKey(String userId) {
         String query = "DELETE FROM users WHERE userId = ?";
-<<<<<<< HEAD
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -236,22 +223,6 @@ public class DbSecurity {
         writer.println();
     }
 
-
-    private void closeResources() {
-=======
->>>>>>> 412e5d96291edcac686528a00b457c490c07db2c
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-
-            ps.setString(1, userId);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-<<<<<<< HEAD
     public String getPublicKey(String userId) {
         String query = "SELECT publicKey FROM users WHERE userId = ?";
         try {
@@ -286,22 +257,6 @@ public class DbSecurity {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
             if (conn != null) conn.close();
-        }
-    }
-    public void reportLostKey(String userId) {
-        String query = "UPDATE users SET endTime = ? WHERE userId = ? AND endTime IS NULL";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-
-            // Thời điểm hiện tại
-            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-            ps.setTimestamp(1, currentTime); // Gán endTime = thời điểm hiện tại
-            ps.setString(2, userId);
-
-            ps.executeUpdate();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
     public boolean cancelOrder(String orderId) {
@@ -413,12 +368,7 @@ public class DbSecurity {
         }
     }
 
-    public static void main(String[] args) {
-        DbSecurity dbSecurity = new DbSecurity();
-        Order order = dbSecurity.getOrderByIdss(28);
-        System.out.println(order);
 
-=======
     public static void main(String[] args) {
         DbSecurity db = new DbSecurity();
 
@@ -433,6 +383,5 @@ public class DbSecurity {
         // Lấy public key hiện tại
         String publicKey = db.getPublicKeyFromDatabase("1");
         System.out.println("Current Public Key: " + publicKey);
->>>>>>> 412e5d96291edcac686528a00b457c490c07db2c
     }
 }

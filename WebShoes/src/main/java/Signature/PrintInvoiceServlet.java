@@ -21,12 +21,12 @@ public class PrintInvoiceServlet extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setHeader("Content-Disposition", "attachment;filename=bill.txt");
 
-        try (PrintWriter writer = resp.getWriter()) {
-            DbSecurity dbSecurity = new DbSecurity();
-            dbSecurity.getOrdersByUserId(orderId, writer); // Truyền orderId vào phương thức
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try (PrintWriter writer = resp.getWriter()) {
+//            DbSecurity dbSecurity = new DbSecurity();
+//            dbSecurity.getOrdersByUserId(orderId, writer); // Truyền orderId vào phương thức
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 }

@@ -11,24 +11,29 @@ import java.util.Locale;
 
 @WebServlet("/changeLanguage")
 public class ChangeLanguageServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String lang = req.getParameter("lang");
 
-        // Nếu lang không hợp lệ, mặc định sẽ là tiếng Việt
-        if (lang == null || (!lang.equals("vi") && !lang.equals("en"))) {
-            lang = "vi";  // Ngôn ngữ mặc định là Tiếng Việt
+        Locale locale;
+        if ("en".equals(lang)) {
+            locale = new Locale("en", "US");
+        } else {
+            locale = new Locale("vi", "VN");
         }
 
-        // Lưu ngôn ngữ vào session
-        Locale locale = new Locale(lang, lang.equals("vi") ? "VN" : "US");
+        // Lưu locale vào session
         req.getSession().setAttribute("locale", locale);
 
-        // Chuyển hướng lại về trang trước đó hoặc trang sản phẩm
-        String redirectURL = req.getHeader("Referer");  // Lấy URL trang hiện tại
-        if (redirectURL == null) {
-            redirectURL = "product";  // Mặc định chuyển hướng đến trang sản phẩm
+        // Chuyển hướng về trang trước đó hoặc trang chính
+        String referer = req.getHeader("Referer");
+        if (referer != null) {
+            resp.sendRedirect(referer);
+        } else {
+            resp.sendRedirect("product");
         }
-        resp.sendRedirect(redirectURL);
     }
 }
+
+

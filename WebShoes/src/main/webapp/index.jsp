@@ -5,7 +5,7 @@
 <%@ page import="java.util.ResourceBundle" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%--<fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'vi_VN'}" />--%>
+<fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'vi_VN'}" />
 <fmt:setBundle basename="messages" />
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -46,21 +46,15 @@
 %>
 
 <div class="dropdown me-3 bg-secondary">
-    <button
-            class="btn btn-light dropdown-toggle"
-            type="button"
-            id="languageDropdown"
-            data-mdb-toggle="dropdown"
-            aria-expanded="false"
-    >Chọn ngôn ngữ
-        <%= locale.getDisplayLanguage(locale) %>
-        <c:out value="${bundle.getString('home.title')}" /> <!-- Hiển thị ngôn ngữ hiện tại -->
+    <button class="btn btn-light dropdown-toggle">
+        <fmt:message key="home.title" />
     </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-        <li><a class="dropdown-item" href="changeLanguage?lang=vi">Tiếng Việt</a></li>
-        <li><a class="dropdown-item" href="changeLanguage?lang=en">English</a></li>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=vi">Tiếng Việt</a></li>
+        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=en">English</a></li>
     </ul>
 </div>
+
 
 
 <header>
