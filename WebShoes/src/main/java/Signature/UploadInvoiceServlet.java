@@ -64,10 +64,12 @@ public class UploadInvoiceServlet extends HttpServlet {
         // Lưu hash và signature vào database
         try {
             dbSecurity.uploadInvoice(userId, orderId, hash, signature);
+            req.setAttribute("uploadMessage", "Tệp đã được tải lên thành công cho Order ID: " + orderId);
+            req.setAttribute("successOrderId", orderId);
             resp .sendRedirect("CustomerOrderServlet");
         } catch (Exception e) {
-            resp.getWriter().println("Lỗi khi xử lý yêu cầu: " + e.getMessage());
-            e.printStackTrace();
+            req.setAttribute("uploadMessage", "Lỗi khi tải tệp lên: " + e.getMessage());
+            req.getRequestDispatcher("CustomerOrder.jsp").forward(req, resp);
         }
     }
 

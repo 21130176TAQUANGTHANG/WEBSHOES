@@ -28,21 +28,13 @@
   }
   ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
 %>
-
 <div class="dropdown me-3 bg-secondary">
-  <button
-          class="btn btn-light dropdown-toggle"
-          type="button"
-          id="languageDropdown"
-          data-mdb-toggle="dropdown"
-          aria-expanded="false"
-  >Chọn ngôn ngữ
-    <%= locale.getDisplayLanguage(locale) %>
-    <c:out value="${bundle.getString('home.title')}" /> <!-- Hiển thị ngôn ngữ hiện tại -->
+  <button class="btn btn-light dropdown-toggle">
+    <fmt:message key="home.title" />
   </button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-    <li><a class="dropdown-item" href="changeLanguage?lang=vi">Tiếng Việt</a></li>
-    <li><a class="dropdown-item" href="changeLanguage?lang=en">English</a></li>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=vi">Tiếng Việt</a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=en">English</a></li>
   </ul>
 </div>
 
@@ -168,6 +160,7 @@
                           ${errorMessage}
                       </div>
                     </c:if>
+
                   </div>
                   <form action="RegisterServlet" method="post" class="mx-1 mx-md-4">
 

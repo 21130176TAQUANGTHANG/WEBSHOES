@@ -13,11 +13,6 @@ import java.io.IOException;
 @WebServlet(name = "RegisterServlet", value = "/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String email = request.getParameter("email");
@@ -48,6 +43,12 @@ public class RegisterServlet extends HttpServlet {
             errorMessage = "Vui lòng điền đầy đủ thông tin.";
         }
 
+        // Kiểm tra email đã tồn tại
+        DBDAO dbdao = new DBDAO();
+        if (dbdao.isEmailExist(email)) {
+            errorMessage = "Email đã được sử dụng. Vui lòng thử với email khác.";
+        }
+
         if (errorMessage != null) {
             // Lưu thông báo lỗi vào attribute và chuyển hướng lại trang đăng ký
             request.setAttribute("errorMessage", errorMessage);
@@ -57,8 +58,10 @@ public class RegisterServlet extends HttpServlet {
 
         // Đăng ký người dùng
         try {
-            DBDAO dbdao = new DBDAO();
-            User user = new User(username, password, email, phone, address);
+            // Băm mật khẩu
+            String hashedPassword = PasswordUtil.hashPassword(password);
+
+            User user = new User(username, hashedPassword, email, phone, address);
             dbdao.registerUser(user);
             response.sendRedirect("Login.jsp");
         } catch (Exception e) {
@@ -68,6 +71,4 @@ public class RegisterServlet extends HttpServlet {
             request.getRequestDispatcher("Register.jsp").forward(request, response);
         }
     }
-
-
 }

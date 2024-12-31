@@ -1,11 +1,5 @@
 <%@ page import="java.util.Locale" %>
-<%@ page import="java.util.ResourceBundle" %><%--
-  Created by IntelliJ IDEA.
-  User: thang
-  Date: 12/10/2024
-  Time: 3:56 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -185,10 +179,11 @@
     <div id="pending-orders" style="display: block;">
         <h2>Đơn hàng chưa xác nhận</h2>
 
-        <c:if test="${errorOrderId != null && o.orderId == errorOrderId}">
-            <div class="alert alert-danger">${uploadMessage}</div>
+        <c:if test="${not empty uploadMessage}">
+            <div class="alert ${empty errorOrderId ? 'alert-success' : 'alert-danger'}" role="alert">
+                    ${uploadMessage}
+            </div>
         </c:if>
-
 
         <table class="table table-bordered">
             <thead>

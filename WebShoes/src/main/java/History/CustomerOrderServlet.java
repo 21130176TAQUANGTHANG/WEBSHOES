@@ -65,7 +65,6 @@ public class CustomerOrderServlet  extends HttpServlet {
 
         User userhis = dao.getUserById(userId); // Lấy thông tin cá nhân
 
-        List<Order> allOrders = dao.getOrdersByUserId(userId);
         List<Order> pendingOrders = dao.getPendingOrdersByUserId(userId);
         List<Order> confirmedOrders = dao.getConfirmedOrdersByUserId(userId);
 

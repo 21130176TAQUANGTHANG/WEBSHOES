@@ -11,47 +11,69 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DBDAO {
-    Connection conn = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-
-    // Phương thức kiểm tra đăng nhập
-    public User checkLogin(String email, String password) {
-        try {
-            String query = "SELECT * FROM login WHERE email=? AND password=?";
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, email);
-            ps.setString(2, password);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                User a = new User(
-                        rs.getString("id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getInt("phone"),
-                        rs.getString("address"),
-                        rs.getInt("role")
-                );
-                return a;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        finally {
+    public class DBDAO {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        public boolean isEmailExist(String email) {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
+                String query = "SELECT email FROM login WHERE email = ?";
+                conn = new DBContext().getConnection();
+                ps = conn.prepareStatement(query);
+                ps.setString(1, email);
+                rs = ps.executeQuery();
+                // Kiểm tra nếu có kết quả trả về
+                return rs.next();
+            } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (rs != null) rs.close();
+                    if (ps != null) ps.close();
+                    if (conn != null) conn.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            return false;
         }
 
-        return null;
-    }
+        // Phương thức kiểm tra đăng nhập
+        public User checkLogin(String email, String password) {
+            try {
+                String query = "SELECT * FROM login WHERE email=? AND password=?";
+                conn = new DBContext().getConnection();
+                ps = conn.prepareStatement(query);
+                ps.setString(1, email);
+                ps.setString(2, password);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    User a = new User(
+                            rs.getString("id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getInt("phone"),
+                            rs.getString("address"),
+                            rs.getInt("role")
+                    );
+                    return a;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            finally {
+                try {
+                    if (rs != null) rs.close();
+                    if (ps != null) ps.close();
+                    if (conn != null) conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
 
     public AccountFF checkFacebookAccount(String name) {
         try {

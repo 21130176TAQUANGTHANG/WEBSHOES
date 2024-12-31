@@ -217,7 +217,6 @@
                         <c:when test="${userHasKey}">
 
                             <p class="text-success">Bạn đã có key. Nếu muốn thay thế, hãy tải lên key mới.</p>
-                            <a href="keyUpload.jsp"><i class="fas fa-upload mb-3"></i> Đã có Key</a><br>
                         </c:when>
                         <c:otherwise>
                             <a href="KeyGenerationServlet"><i class="fas fa-key"></i> Tạo key</a><br>
