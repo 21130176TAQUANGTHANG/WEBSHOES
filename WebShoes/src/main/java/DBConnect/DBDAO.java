@@ -11,69 +11,69 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-    public class DBDAO {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        public boolean isEmailExist(String email) {
+public class DBDAO {
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    public boolean isEmailExist(String email) {
+        try {
+            String query = "SELECT email FROM login WHERE email = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            // Kiểm tra nếu có kết quả trả về
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             try {
-                String query = "SELECT email FROM login WHERE email = ?";
-                conn = new DBContext().getConnection();
-                ps = conn.prepareStatement(query);
-                ps.setString(1, email);
-                rs = ps.executeQuery();
-                // Kiểm tra nếu có kết quả trả về
-                return rs.next();
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    if (rs != null) rs.close();
-                    if (ps != null) ps.close();
-                    if (conn != null) conn.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
-            return false;
         }
+        return false;
+    }
 
-        // Phương thức kiểm tra đăng nhập
-        public User checkLogin(String email, String password) {
+    // Phương thức kiểm tra đăng nhập
+    public User checkLogin(String email, String password) {
+        try {
+            String query = "SELECT * FROM login WHERE email=? AND password=?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User a = new User(
+                        rs.getString("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getInt("phone"),
+                        rs.getString("address"),
+                        rs.getInt("role")
+                );
+                return a;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
             try {
-                String query = "SELECT * FROM login WHERE email=? AND password=?";
-                conn = new DBContext().getConnection();
-                ps = conn.prepareStatement(query);
-                ps.setString(1, email);
-                ps.setString(2, password);
-                rs = ps.executeQuery();
-                while (rs.next()) {
-                    User a = new User(
-                            rs.getString("id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getInt("phone"),
-                            rs.getString("address"),
-                            rs.getInt("role")
-                    );
-                    return a;
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            finally {
-                try {
-                    if (rs != null) rs.close();
-                    if (ps != null) ps.close();
-                    if (conn != null) conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
         }
+
+        return null;
+    }
 
     public AccountFF checkFacebookAccount(String name) {
         try {
@@ -90,7 +90,7 @@ import java.util.stream.Collectors;
                 );
                 return a;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -115,11 +115,12 @@ import java.util.stream.Collectors;
                 );
                 return a;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
     public boolean isEmailOrUsernameTaken(String email, String username) {
         String query = "SELECT 1 FROM login WHERE email = ? OR username = ?";
         try {
@@ -157,8 +158,7 @@ import java.util.stream.Collectors;
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-        finally {
+        } finally {
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
@@ -170,6 +170,7 @@ import java.util.stream.Collectors;
 
         return user;
     }
+
     public void saveGoogleAccount(GoogleAccount googleAccount) {
         try {
             String query = "INSERT INTO googleaccount (email, name, first_name, given_name, family_name, picture, verified_email) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -217,7 +218,7 @@ import java.util.stream.Collectors;
     }
 
     public List<User> getAllUsers() {
-        List<User>users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         String query = "SELECT * FROM login";
         try {
             conn = new DBContext().getConnection();
@@ -235,8 +236,7 @@ import java.util.stream.Collectors;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-        finally {
+        } finally {
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
@@ -247,8 +247,9 @@ import java.util.stream.Collectors;
         }
         return users;
     }
+
     public List<AccountFF> getAllFacebook() {
-        List<AccountFF>ff = new ArrayList<>();
+        List<AccountFF> ff = new ArrayList<>();
         String query = "SELECT * FROM faceaccount";
         try {
             conn = new DBContext().getConnection();
@@ -262,8 +263,7 @@ import java.util.stream.Collectors;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-        finally {
+        } finally {
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
@@ -274,8 +274,9 @@ import java.util.stream.Collectors;
         }
         return ff;
     }
+
     public List<GoogleAccount> getAllGoogle() {
-        List<GoogleAccount>gg = new ArrayList<>();
+        List<GoogleAccount> gg = new ArrayList<>();
         String query = "SELECT * FROM googleaccount";
         try {
             conn = new DBContext().getConnection();
@@ -284,7 +285,7 @@ import java.util.stream.Collectors;
             while (rs.next()) {
                 GoogleAccount googleAccount = new GoogleAccount(rs.getString("id"),
                         rs.getString("email"),
-                         rs.getString("name"),
+                        rs.getString("name"),
                         rs.getString("first_name"),
                         rs.getString("given_name"),
                         rs.getString("family_name"),
@@ -294,8 +295,7 @@ import java.util.stream.Collectors;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-        finally {
+        } finally {
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
@@ -306,7 +306,8 @@ import java.util.stream.Collectors;
         }
         return gg;
     }
-    public List<Product>getAllProducts() {
+
+    public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<Product>();
         String query = "SELECT * FROM product";
         try {
@@ -327,12 +328,10 @@ import java.util.stream.Collectors;
                 products.add(product);
 
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(); // Hiển thị stack trace đầy đủ
             throw new RuntimeException("Error occurred in getAllProducts: " + e.getMessage(), e);
-        }
-
-        finally {
+        } finally {
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
@@ -344,8 +343,6 @@ import java.util.stream.Collectors;
 
         return products;
     }
-
-
 
 
     // hiển thị chi tiết sản phẩm theo id
@@ -380,7 +377,6 @@ import java.util.stream.Collectors;
         }
         return null;
     }
-
 
 
     // lấy sản phẩm theo id
@@ -429,7 +425,8 @@ import java.util.stream.Collectors;
         }
         return products;
     }
-//--------------------------------------------
+
+    //--------------------------------------------
     // lưu thông tin đăt hàng
 // Lưu thông tin vào bảng Orders
     public int saveOrder(String userId, int totalPrice, String name, String address, String phone, String notes) {
@@ -455,7 +452,8 @@ import java.util.stream.Collectors;
         }
         return -1;
     }
-    public boolean updateOrderStatus(int orderId, String status){
+
+    public boolean updateOrderStatus(int orderId, String status) {
         String query = "UPDATE orders SET status = ? WHERE order_id = ?";
         try {
             conn = new DBContext().getConnection();
@@ -482,11 +480,12 @@ import java.util.stream.Collectors;
             ps.setString(4, size);
             ps.setInt(5, subtotal);
             ps.executeUpdate();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-// lich su
+
+    // lich su
     public List<Order> getOrderHistoryByUserId(String userId) {
         List<Order> orderList = new ArrayList<>();
         String query = "SELECT * FROM orders WHERE user_id = ?";
@@ -508,7 +507,7 @@ import java.util.stream.Collectors;
                 orderList.add(order);
 
             }
-        }catch (SQLException  e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -611,6 +610,7 @@ import java.util.stream.Collectors;
             }
         }
     }
+
     public void updateProduct(Product product) {
         try {
             conn = new DBContext().getConnection();  // Giả sử bạn có lớp kết nối DB
@@ -635,7 +635,7 @@ import java.util.stream.Collectors;
         }
     }
 
-    public List<Order> getAllOrder(){
+    public List<Order> getAllOrder() {
         List<Order> orderList = new ArrayList<Order>();
 
         try {
@@ -664,6 +664,7 @@ import java.util.stream.Collectors;
         }
         return orderList;
     }
+
     public List<Order> getOrdersByPage(int page, int size) {
         List<Order> orderList = new ArrayList<>();
         int offset = (page - 1) * size; // Tính offset cho SQL
@@ -717,13 +718,65 @@ import java.util.stream.Collectors;
         return total;
     }
 
-
+    public Order getOrderById(int orderId) {
+        String query = "SELECT * FROM orders WHERE order_id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("order_id"),
+                        rs.getString("user_id"),
+                        rs.getInt("total_price"),
+                        rs.getTimestamp("order_date"),
+                        rs.getString("notes"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("phone"),
+                        rs.getString("status"),
+                        rs.getString("signature")
+                );
+                return order;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+    public String getCustomerEmailByUserId(String userId) {
+        String query = "SELECT email FROM login WHERE id = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("email");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return null;
+    }
+    private void closeResources() {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error closing database resources", e);
+        }
+    }
 
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-        List<Order>orderList = dbdao.getAllOrder();
-        for (Order order : orderList){
+        List<Order> orderList = dbdao.getAllOrder();
+        for (Order order : orderList) {
             System.out.println(order);
         }
 

@@ -210,6 +210,17 @@
 
             </nav>
             <!-- End of Topbar -->
+<%--            hieenr thi thong bao gui emai--%>
+            <c:if test="${param.emailError == 'true'}">
+                <div class="alert alert-danger" role="alert">
+                    Gửi email xác nhận thất bại. Vui lòng kiểm tra lại.
+                </div>
+            </c:if>
+            <c:if test="${param.success == 'true'}">
+                <div class="alert alert-success" role="alert">
+                    Đơn hàng đã được xác nhận và email thông báo đã được gửi thành công.
+                </div>
+            </c:if>
 
             <div class="container mt-5">
                 <div class="d-flex justify-content-between p-2">

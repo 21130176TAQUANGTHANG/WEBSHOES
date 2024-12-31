@@ -199,26 +199,26 @@ public class DbSecurity {
     }
 
     private void printOrder(Order order, PrintWriter writer) {
-        writer.println("========== INVOICE ==========");
-        writer.println("Customer Name: " + order.getName());
-        writer.println("Address: " + order.getAddress());
-        writer.println("Phone Number: " + order.getPhone());
+        writer.println("========== HÓA ĐƠN ==========");
+        writer.println("Tên khách hàng: " + order.getName());
+        writer.println("Địa chỉ: " + order.getAddress());
+        writer.println("Số điện thoại: " + order.getPhone());
         writer.println("----------------------------");
-        writer.println("Order Date: " + order.getOrderDate());
-        writer.println("Order ID: " + order.getOrderId());
-        writer.println("Notes: " + order.getNotes());
+        writer.println("Ngày đặt hàng: " + order.getOrderDate());
+        writer.println("Mã đơn hàng: " + order.getOrderId());
+        writer.println("Ghi chú: " + order.getNotes());
         writer.println("----------------------------");
-        writer.println("Product List:");
-        writer.printf("%-20s %-10s %-10s %-10s\n", "Product Name", "Qty", "Unit Price", "Total Price");
+        writer.println("Danh sách sản phẩm:");
+        writer.printf("%-20s %-10s %-10s %-10s\n", "Tên sản phẩm", "SL", "Giá/SP", "Thành tiền");
         for (OrderItem item : order.getOrderItems()) {
             writer.printf("%-20s %-10d %-10.2f %-10.2f\n",
                     item.getProductName(),
                     item.getQuantity(),
-                    (double) item.getPrice(), // Cast the price to double
-                    (double) item.getSubtotal()); // Cast subtotal to double
+                    (double) item.getPrice(), // Ép kiểu giá sang double
+                    (double) item.getSubtotal()); // Ép kiểu thành tiền sang double
         }
         writer.println("----------------------------");
-        writer.printf("Total Price: %d\n", order.getTotalPrice()); // Use %d for int type
+        writer.printf("Tổng cộng: %d\n", order.getTotalPrice()); // Dùng %d cho kiểu int
         writer.println("============================");
         writer.println();
     }
@@ -368,7 +368,72 @@ public class DbSecurity {
         }
     }
 
+    // Phương thức in hóa đơn chứa thông tin sản phẩm
+    public void getOrdersByUserId(int orderid, PrintWriter writer) {
+        String query = "SELECT o.order_id, o.order_date, o.notes, o.total_price, o.name, o.address, o.phone, o.status, " +
+                "od.quantity, od.size, od.subtotal, p.productName, p.productPrice " +
+                "FROM orders o " +
+                "JOIN orderdetails od ON o.order_id = od.order_id " +
+                "JOIN product p ON od.product_id = p.productid " +
+                "WHERE o.order_id = ?";
 
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, orderid);
+            rs = ps.executeQuery();
+
+            Order currentOrder = null;
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                if (currentOrder == null || currentOrder.getOrderId() != orderId) {
+                    // Nếu chuyển sang hóa đơn mới, in hóa đơn cũ
+                    if (currentOrder != null) {
+                        printOrder(currentOrder, writer);
+                    }
+
+                    // Khởi tạo hóa đơn mới
+                    currentOrder = new Order(
+                            orderId,
+                            rs.getTimestamp("order_date"),
+                            rs.getString("notes"),
+                            rs.getInt("total_price"),
+                            rs.getString("name"),
+                            rs.getString("address"),
+                            rs.getString("phone"),
+                            rs.getString("status")
+                    );
+                }
+
+                // Thêm sản phẩm vào hóa đơn
+                currentOrder.addOrderItem(new OrderItem(
+                        rs.getString("productName"),  // Tên sản phẩm
+                        rs.getInt("quantity"),       // Số lượng
+                        rs.getInt("productPrice"),// Giá sản phẩm
+                        rs.getInt("subtotal"),    // Tổng tiền (subtotal)
+                        rs.getString("size")         // Kích thước (size)
+                ));
+            }
+
+            // In hóa đơn cuối cùng
+            if (currentOrder != null) {
+                printOrder(currentOrder, writer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+    }
+    private void closeResources() {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error closing database resources", e);
+        }
+    }
     public static void main(String[] args) {
         DbSecurity db = new DbSecurity();
 
