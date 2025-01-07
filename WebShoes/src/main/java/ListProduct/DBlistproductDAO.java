@@ -148,6 +148,43 @@ public class DBlistproductDAO {
         }
         return list;
     }
+    public List<Product> getProductsByName(String name) {
+        List<Product> list = new ArrayList<>();
+        String SQL = "SELECT * FROM product WHERE productName LIKE ? ";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(SQL);
+            ps.setString(1, "%" + name + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Product product = new Product(
+                        rs.getInt("productId"),
+                        rs.getString("productName"),
+                        rs.getString("productImage"),
+                        rs.getInt("productPrice"),
+                        rs.getString("productDescription"),
+                        rs.getInt("productQuantity"),
+                        rs.getInt("productSize"),
+                        rs.getInt("productColor"),
+                        rs.getInt("productLogo")
+                );
+                list.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
 
     public static void main(String[] args) {
         DBlistproductDAO dao = new DBlistproductDAO();
@@ -156,7 +193,7 @@ public class DBlistproductDAO {
         List<Integer> ids = Arrays.asList(100, 102, 103, 104, 105);
 
         // Gọi phương thức để lấy danh sách sản phẩm
-        List<Product> products = dao.getProductsByIds(ids);
+        List<Product> products = dao.getProductsByName("Adid");
 
         // Hiển thị danh sách sản phẩm
         for (Product product : products) {

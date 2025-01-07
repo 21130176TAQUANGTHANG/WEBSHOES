@@ -28,7 +28,7 @@ public class ListProductServlet extends HttpServlet {
         // Đọc ResourceBundle theo locale
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
         List<Product> allProducts = dao.getAllProduct();
-
+        List<Product> getlogo = dao.getProductsByLogo(0);
         if (allProducts == null) {
             req.setAttribute("errorMessage", bundle.getString("noProductsFound")); // Dùng ResourceBundle cho thông báo
         } else {
