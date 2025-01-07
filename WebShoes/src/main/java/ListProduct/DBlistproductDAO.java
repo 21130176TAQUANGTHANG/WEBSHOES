@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DBlistproductDAO {
@@ -21,6 +22,62 @@ public class DBlistproductDAO {
         try {
             conn = new DBContext().getConnection(); // Kết nối cơ sở dữ liệu
             ps = conn.prepareStatement(SQL); // Chuẩn bị câu truy vấn
+            rs = ps.executeQuery(); // Thực thi truy vấn
+
+            // Duyệt qua kết quả và thêm vào danh sách sản phẩm
+            while (rs.next()) {
+                Product product = new Product(
+                        rs.getInt("productId"), // Cột productId
+                        rs.getString("productName"), // Cột productName
+                        rs.getString("productImage"), // Cột productImage
+                        rs.getInt("productPrice"), // Cột productPrice
+                        rs.getString("productDescription"), // Cột productDescription
+                        rs.getInt("productQuantity"), // Cột productQuantity
+                        rs.getInt("productSize"), // Cột productSize
+                        rs.getInt("productColor"), // Cột productColor
+                        rs.getInt("productLogo") // Cột productLogo
+                );
+                list.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Đóng tài nguyên
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+    public List<Product> getProductsByIds(List<Integer> ids) {
+        List<Product> list = new ArrayList<>();
+        if (ids == null || ids.isEmpty()) {
+            return list; // Trả về danh sách rỗng nếu không có id
+        }
+
+        // Xây dựng câu truy vấn SQL
+        StringBuilder SQL = new StringBuilder("SELECT * FROM product WHERE productId IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            SQL.append("?");
+            if (i < ids.size() - 1) {
+                SQL.append(", ");
+            }
+        }
+        SQL.append(")");
+
+        try {
+            conn = new DBContext().getConnection(); // Kết nối cơ sở dữ liệu
+            ps = conn.prepareStatement(SQL.toString()); // Chuẩn bị câu truy vấn
+
+            // Gán giá trị cho các tham số ?
+            for (int i = 0; i < ids.size(); i++) {
+                ps.setInt(i + 1, ids.get(i));
+            }
+
             rs = ps.executeQuery(); // Thực thi truy vấn
 
             // Duyệt qua kết quả và thêm vào danh sách sản phẩm
@@ -95,11 +152,15 @@ public class DBlistproductDAO {
     public static void main(String[] args) {
         DBlistproductDAO dao = new DBlistproductDAO();
 
-        // Lấy danh sách sản phẩm của Nike (logo = 0)
-        System.out.println("Danh sách sản phẩm Nike:");
-        List<Product> nikeProducts = dao.getProductsByLogo(0);
-        for (Product product : nikeProducts) {
-            System.out.println(product);
+        // Danh sách các id sản phẩm cần lấy
+        List<Integer> ids = Arrays.asList(100, 102, 103, 104, 105);
+
+        // Gọi phương thức để lấy danh sách sản phẩm
+        List<Product> products = dao.getProductsByIds(ids);
+
+        // Hiển thị danh sách sản phẩm
+        for (Product product : products) {
+            System.out.println(product.getProductName() + " - " + product.getProductPrice());
         }
     }
 }

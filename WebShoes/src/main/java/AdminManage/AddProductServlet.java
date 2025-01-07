@@ -22,6 +22,8 @@ import java.nio.file.Paths;
         maxRequestSize = 1024 * 1024 * 50    // 50MB
 )
 public class AddProductServlet extends HttpServlet {
+    private static final String IMAGE_DIRECTORY = "D:\\ManageImage"; // Đường dẫn thư mục lưu ảnh
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -61,27 +63,31 @@ public class AddProductServlet extends HttpServlet {
                 return;
             }
 
-            Part fileName = req.getPart("productImage");
-            String imageFileFilename = fileName.getSubmittedFileName();
-            System.out.println(imageFileFilename);
+            // Lấy tên file ảnh
+            String imageFileFilename = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
-            String uploadPath = "D:\\LTWEB\\WebShoes\\image\\" + imageFileFilename;
-            System.out.println( "duong dan" +uploadPath);
-
-            try {
-                FileOutputStream fileOutputStream = new FileOutputStream(uploadPath);
-                InputStream inputStream = filePart.getInputStream();
-                byte[] buffer = new byte[inputStream.available()];
-                inputStream.read(buffer);
-                fileOutputStream.write(buffer);
-                fileOutputStream.flush();
-                fileOutputStream.close();
-            }catch (Exception e) {
-                e.printStackTrace();
+            // Kiểm tra và tạo thư mục nếu chưa tồn tại
+            String directoryPath = "D:\\ManageImage";
+            File directory = new File(directoryPath);
+            if (!directory.exists()) {
+                if (directory.mkdirs()) {
+                    System.out.println("Thư mục đã được tạo: " + directoryPath);
+                } else {
+                    System.out.println("Không thể tạo thư mục: " + directoryPath);
+                }
             }
 
+            // Đường dẫn đầy đủ để lưu ảnh
+            String uploadPath = directoryPath + File.separator + imageFileFilename;
 
-
+            try (FileOutputStream fileOutputStream = new FileOutputStream(uploadPath);
+                 InputStream inputStream = filePart.getInputStream()) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    fileOutputStream.write(buffer, 0, bytesRead);
+                }
+            }
 
             // Tạo đối tượng Product và thêm vào DB
             DBDAO dao = new DBDAO();
@@ -95,9 +101,7 @@ public class AddProductServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            resp.getWriter().println("Error: " + e.getMessage()) ;
+            resp.getWriter().println("Error: " + e.getMessage());
         }
     }
-
-
 }
