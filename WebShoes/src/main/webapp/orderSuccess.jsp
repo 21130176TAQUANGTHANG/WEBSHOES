@@ -48,55 +48,23 @@
   </nav>
 </header>
 <div class="container mt-5">
-  <c:choose>
-    <c:when test="${not empty sessionScope.cart && not empty sessionScope.cart.data}">
-      <div class="alert alert-success text-center">
-        <h4>Đặt Hàng Thành Công!</h4>
-        <p>Cảm ơn bạn đã mua hàng. Đơn hàng của bạn sẽ được xử lý và giao hàng sớm nhất có thể.</p>
-      </div>
-      <table class="table table-bordered">
-        <thead class="thead-dark">
-        <tr>
-          <th>#</th>
-          <th>Tên Sản Phẩm</th>
-          <th>Số Lượng</th>
-          <th>Giá</th>
-          <th>Thành Tiền</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="cartProductEntry" items="${sessionScope.cart.data}" varStatus="status">
-          <c:set var="cartProduct" value="${cartProductEntry.value}" />
-          <c:set var="product" value="${cartProduct.product}" />
-          <tr>
-            <td>${status.count}</td>
-            <td>${product.productName}</td>
-            <td>${cartProduct.quantity}</td>
-            <td><fmt:formatNumber value="${product.price}" type="currency" currencySymbol="₫"/></td>
-            <td><fmt:formatNumber value="${cartProduct.subtotal}" type="currency" currencySymbol="₫"/></td>
-          </tr>
-        </c:forEach>
-        </tbody>
-        <tfoot>
-        <tr>
-          <th colspan="4" class="text-right">Tổng Cộng:</th>
-          <th><fmt:formatNumber value="${sessionScope.cart.totalPrice}" type="currency" currencySymbol="₫"/></th>
-        </tr>
-        </tfoot>
-      </table>
-      <div class="text-center mt-4">
-        <a href="product" class="btn btn-primary">Tiếp Tục Mua Sắm</a>
-      </div>
-    </c:when>
-    <c:otherwise>
-
-      <div class="alert alert-success text-center">
-        <h4>Cảm ơn bạn đã mua hàng. Đơn hàng của bạn sẽ được xử lý và giao hàng sớm nhất có thể.!</h4>
-        <a href="product" class="btn btn-primary">Tiếp Tục Mua Sắm</a>
-      </div>
-
-    </c:otherwise>
-  </c:choose>
+    <h2 class="text-center mb-4">Thông Tin Đơn Hàng</h2>
+    <c:forEach var="order" items="${orders}">
+        <div class="order-details">
+            <p><strong>Mã đơn hàng:</strong> ${order.orderId}</p>
+            <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
+            <p><strong>Trạng thái:</strong> ${order.status}</p>
+            <p><strong>Tổng tiền:</strong> <fmt:formatNumber value="${order.totalPrice}" type="currency" currencySymbol="₫" /></p>
+            <c:forEach var="orderItem" items="${order.orderItems}">
+                <div>
+                    <p><strong>Sản phẩm:</strong> ${orderItem.productName}</p>
+                    <p><strong>Số lượng:</strong> ${orderItem.quantity}</p>
+                    <p><strong>Giá:</strong> <fmt:formatNumber value="${orderItem.price}" type="currency" currencySymbol="₫" /></p>
+                </div>
+            </c:forEach>
+        </div>
+    </c:forEach>
 </div>
+
 </body>
 </html>

@@ -11,11 +11,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.security.*;
-import java.util.Base64;
+import java.security.Security;
+import java.sql.Timestamp;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 @WebServlet("/KeyGenerationServlet")
 public class KeyGenerationServlet extends HttpServlet {
+
+    static {
+        // Đảm bảo BouncyCastle được thêm khi servlet được tải
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,7 +47,7 @@ public class KeyGenerationServlet extends HttpServlet {
         }
 
         if (userId == null) {
-            resp.sendRedirect("checkout.jsp?error=noUser");
+            resp.sendRedirect("login.jsp"); // Điều hướng đến trang đăng nhập nếu chưa đăng nhập
             return;
         }
 
@@ -57,41 +63,39 @@ public class KeyGenerationServlet extends HttpServlet {
                 return;
             }
 
-            // Tạo cặp key mới
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(2048);
-            KeyPair pair = keyGen.generateKeyPair();
+            // Sử dụng lớp ChuKyDientu để tạo cặp key
+            ElectronicSignature electronicSignature = new ElectronicSignature("RSA", "SHA1PRNG", "SUN");
+            boolean keyGenerated = electronicSignature.genKey();
 
-            PrivateKey privateKey = pair.getPrivate();
-            PublicKey publicKey = pair.getPublic();
+            if (!keyGenerated) {
+                throw new Exception("Không thể tạo cặp khóa.");
+            }
 
-            // Chuyển đổi Public Key sang Base64
-            String encodedPublicKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+            // Lấy Public Key và Private Key ở dạng Base64
+            String encodedPublicKey = electronicSignature.getPublicKeyAsString();
+            String encodedPrivateKey = electronicSignature.getPrivateKeyAsString();
+
+            // Gán Public Key vào request và session
             req.setAttribute("publicKey", encodedPublicKey);
+            session.setAttribute("publicKey", electronicSignature.publicKey);
 
-            // Mã hóa Private Key và lưu vào session
-            String encodedPrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+            // Gán Private Key vào request và session
             req.setAttribute("privateKey", encodedPrivateKey);
-            req.getSession().setAttribute("privateKey", privateKey);
+            session.setAttribute("privateKey", electronicSignature.privateKey);
+
+            // Thời gian hiện tại làm createTime
+            Timestamp createTime = new Timestamp(System.currentTimeMillis());
+            Timestamp endTime = null; // Ban đầu là null
 
             // Lưu Public Key vào Database
-            db.savePublicKeyToDatabase(userId, encodedPublicKey);
-
-            System.out.println("Public Key: " + encodedPublicKey);
-            System.out.println("Private Key: " + encodedPrivateKey);
-            System.out.println("Private Key lưu vào session: " + privateKey);
-
+            db.savePublicKeyToDatabase(userId, encodedPublicKey, createTime, endTime);
 
             // Chuyển hướng đến trang hiển thị kết quả
             req.getRequestDispatcher("keyResult.jsp").forward(req, resp);
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi khi tạo cặp key.");
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi khi xử lý cơ sở dữ liệu.");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi khi xử lý cơ sở dữ liệu hoặc tạo cặp khóa.");
         }
     }
-
 }

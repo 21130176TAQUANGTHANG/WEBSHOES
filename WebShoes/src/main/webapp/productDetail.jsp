@@ -167,6 +167,8 @@
 
   <h3>Thông tin sản phẩm</h3>
   <div class="">
+    <img src="https://cdn.chiaki.vn/unsafe/0x800/left/top/smart/filters:quality(75)/https://chiaki.vn/upload/news/2022/08/bang-size-giay-cach-quy-doi-size-giay-quoc-te-va-viet-nam-2022-11082022164620.jpg" style="height: 500px">
+
     <h3><b>${product.productName}</b></h3>
     <h2>Mô tả </h2>
     <p>${product.productDescription}</p>

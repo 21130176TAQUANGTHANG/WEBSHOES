@@ -110,6 +110,12 @@
                 <span>Giao diện của hàng</span></a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="VerifySignatureServlet">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Kiểm tra chữ ký điện tử</span></a>
+        </li>
+
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">

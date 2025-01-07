@@ -8,7 +8,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><html>
 <head>
-    <title>Title</title>
+    <title>KeyResult</title>
   <link
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
           rel="stylesheet"
@@ -141,13 +141,20 @@
       <!-- Public Key luôn được hiển thị -->
       <textarea rows="5" class="form-control mb-3" readonly>${publicKey}</textarea>
       <input type="hidden" name="publicKey" value="${publicKey}" />
+
+      <h5>Private Key:</h5>
+      <p class="text-muted">Private Key được bảo mật, tải xuống để lưu trữ.</p>
     </div>
-    <div class="card-footer">
+    <div class="card-footer d-flex justify-content-between">
+      <!-- Nút tải xuống Public Key -->
+<%--      <a href="downloadPublicKey" class="btn btn-success">Tải xuống Public Key</a>--%>
+
       <!-- Nút tải xuống Private Key -->
       <a href="downloadPrivateKey" class="btn btn-primary">Tải xuống Private Key</a>
     </div>
   </div>
 </div>
+
 
 </body>
 </html>

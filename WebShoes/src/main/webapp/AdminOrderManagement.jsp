@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>AdminOrderManagement.jsp</title>
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -91,7 +91,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="OrderManagement.html">
+            <a class="nav-link" href="admin_order">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Quản lý đơn hàng</span></a>
         </li>
@@ -100,6 +100,12 @@
             <a class="nav-link" href="editStore.html">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Giao diện của hàng</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="VerifySignatureServlet">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Kiểm tra chữ ký điện tử</span></a>
         </li>
 
 
@@ -204,6 +210,17 @@
 
             </nav>
             <!-- End of Topbar -->
+<%--            hieenr thi thong bao gui emai--%>
+            <c:if test="${param.emailError == 'true'}">
+                <div class="alert alert-danger" role="alert">
+                    Gửi email xác nhận thất bại. Vui lòng kiểm tra lại.
+                </div>
+            </c:if>
+            <c:if test="${param.success == 'true'}">
+                <div class="alert alert-success" role="alert">
+                    Đơn hàng đã được xác nhận và email thông báo đã được gửi thành công.
+                </div>
+            </c:if>
 
             <div class="container mt-5">
                 <div class="d-flex justify-content-between p-2">
@@ -220,6 +237,8 @@
                         <th>Name</th>
                         <th>Address</th>
                         <th>Phone</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -239,6 +258,15 @@
                                 <td>${o.name}</td>
                                 <td>${o.address}</td>
                                 <td>${o.phone}</td>
+                                <td>${o.status}</td>
+                                <td>
+                                    <c:if test="${o.status eq 'Chờ xác nhận'}">
+                                        <form method="post" action="ConfirmOrderServlet">
+                                            <input type="hidden" name="orderId" value="${o.orderId}" />
+                                            <button type="submit" class="btn btn-success">Xác nhận</button>
+                                        </form>
+                                    </c:if>
+                                </td>
                             </tr>
                         </c:forEach>
                     </c:if>

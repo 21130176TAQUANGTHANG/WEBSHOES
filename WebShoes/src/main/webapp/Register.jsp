@@ -1,3 +1,5 @@
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -19,6 +21,24 @@
   />
 </head>
 <body>
+<%
+  Locale locale = (Locale) session.getAttribute("locale");
+  if (locale == null) {
+    locale = new Locale("vi", "VN"); // Ngôn ngữ mặc định là Tiếng Việt
+  }
+  ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+%>
+<div class="dropdown me-3 bg-secondary">
+  <button class="btn btn-light dropdown-toggle">
+    <fmt:message key="home.title" />
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=vi">Tiếng Việt</a></li>
+    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=en">English</a></li>
+  </ul>
+</div>
+
+
 <header>
   <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
     <div class="container-fluid">
@@ -33,42 +53,95 @@
       >
         <i class="fas fa-bars"></i>
       </button>
-      <a class="navbar-brand" href="#">Trang chủ</a>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Trang chủ</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Danh sách sản phẩm</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"  href="#">Giới thiệu</a
-            >
-          </li>
-        </ul>
-        <form class="d-flex input-group w-auto me-3">
-          <input
-                  type="search"
-                  class="form-control"
-                  placeholder="Tìm kiếm"
-                  aria-label="Search"
-          />
-          <button
-                  data-mdb-ripple-init
-                  class="btn btn-outline-primary"
-                  type="button"
-                  data-mdb-ripple-color="dark"
-          >
-            Tìm kiếm
-          </button>
-        </form>
-        <button type="button" class="btn btn-danger">Đăng nhập</button>
-      </div>
+      <a class="navbar-brand" href="product"><%= bundle.getString("home.title") %></a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="product"><%= bundle.getString("menu.home") %></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="listproduct"><%= bundle.getString("menu.productList") %></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="viewCart.jsp"><%= bundle.getString("menu.cart") %></a>
+        </li>
+      </ul>
+
+      <form class="d-flex input-group w-auto me-3">
+        <input
+                type="search"
+                class="form-control"
+                placeholder="Tìm kiếm"
+                aria-label="Search"
+        />
+        <button
+                data-mdb-ripple-init
+                class="btn btn-outline-primary"
+                type="button"
+                data-mdb-ripple-color="dark"
+        >
+          Tìm kiếm
+        </button>
+      </form>
+
+      <c:if test="${sessionScope.user != null}">
+        <div class="dropdown me-5">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+             data-mdb-toggle="dropdown" aria-expanded="false">
+            Xin chào, ${sessionScope.user.username}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <!-- Hiển thị thông tin cá nhân -->
+            <li>
+              <a class="dropdown-item" href="userProfileServlet">
+                <i class="fas fa-user-circle me-2"></i>Thông tin cá nhân
+              </a>
+            </li>
+            <!-- Nút đăng xuất -->
+            <li>
+              <c:if test="${sessionScope.user.role == 1}">
+                <a href="admin.jsp" class="dropdown-item">
+                  <i class="fas fa-user-circle me-2"></i>Go to Admin Page
+                </a>
+              </c:if>
+            </li>
+            <li>
+              <a href="CustomerOrderServlet" class="dropdown-item">
+                <i class="fas fa-user-circle me-2"></i>Đơn hàng
+              </a>
+            </li>
+            <li>
+              <a href="CustomerHistoryOrder.jsp" class="dropdown-item">
+                <i class="fas fa-user-circle me-2"></i>Lịch sử đặt hàng
+              </a>
+            </li>
+
+            <li>
+              <a class="dropdown-item text-danger" href="LogoutServlet">
+                <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </div>
+      </c:if>
+
+      <c:if test="${sessionScope.facebookUser !=null}">
+        <h3>${sessionScope.facebookUser.name}</h3>
+        <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+      </c:if>
+
+      <c:if test="${sessionScope.googleUser !=null}">
+        <h3>${sessionScope.googleUser.name}</h3>
+        <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+      </c:if>
+
+
+      <c:if test="${sessionScope.user ==null}">
+        <a href="Login.jsp">Dang nhap</a>
+      </c:if>
+    </div>
     </div>
   </nav>
 </header>
-
 <div>
   <section class="vh-100" style="background-color: #eee;">
     <div class="container h-100">
@@ -80,7 +153,15 @@
                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
                   <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                  <div>
+                    <!-- Kiểm tra và hiển thị thông báo lỗi -->
+                    <c:if test="${not empty errorMessage}">
+                      <div class="alert alert-danger" role="alert">
+                          ${errorMessage}
+                      </div>
+                    </c:if>
 
+                  </div>
                   <form action="RegisterServlet" method="post" class="mx-1 mx-md-4">
 
                     <div class="d-flex flex-row align-items-center mb-4">
