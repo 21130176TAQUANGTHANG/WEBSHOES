@@ -54,7 +54,7 @@ public class ConfirmOrderServlet extends HttpServlet {
 
         // Tài khoản gửi email
         String fromEmail = "yuuwhisky@gmail.com";
-        String password = "";
+        String password = "yivn cwzx jbkt ldqn";
 
         // Thiết lập session
         Session session = Session.getInstance(props, new Authenticator() {
