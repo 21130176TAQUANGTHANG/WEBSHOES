@@ -19,10 +19,14 @@
         .product-container {
             margin-top: 30px;
         }
+        .product-card {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
+<!-- Header -->
 <header>
     <!-- Thanh điều hướng chính -->
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
@@ -31,6 +35,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" href="listproduct.jsp">Danh sách sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="listproduct">Danh sách sản phẩm</a></li>
                     <li class="nav-item"><a class="nav-link" href="viewCart.jsp">Giỏ hàng</a></li>
                 </ul>
             </div>
@@ -58,11 +63,15 @@
 
 <!-- Danh sách sản phẩm -->
 <div class="container product-container">
-    <div class="row mt-4">
-        <c:if test="${not empty errorMessage}">
-            <div class="alert alert-warning">${errorMessage}</div>
-        </c:if>
+    <h2 class="text-center mb-4">Danh sách sản phẩm</h2>
 
+    <!-- Error message display -->
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-warning text-center">${errorMessage}</div>
+    </c:if>
+
+    <!-- Product list -->
+    <div class="row">
         <c:forEach var="product" items="${listproducts}">
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card product-card">
@@ -79,5 +88,13 @@
     </div>
 </div>
 
+<!-- Footer -->
+<footer class="bg-light text-center text-lg-start mt-4">
+    <div class="text-center p-3">
+        © 2024 Danh sách sản phẩm. All Rights Reserved.
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.js"></script>
 </body>
 </html>
