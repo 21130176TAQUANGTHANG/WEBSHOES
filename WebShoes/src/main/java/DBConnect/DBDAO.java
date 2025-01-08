@@ -40,8 +40,7 @@ public class DBDAO {
         return false;
     }
 
-    public User checkLogin(String email, String enteredPassword) {
-        User user = null;
+    public User checkLogin(String email) {
         try {
             String query = "SELECT * FROM login WHERE email = ?";
             conn = new DBContext().getConnection();
@@ -50,21 +49,15 @@ public class DBDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Lấy thông tin người dùng từ cơ sở dữ liệu
-                user = new User(
+                return new User(
                         rs.getString("id"),
                         rs.getString("username"),
-                        rs.getString("password"), // Mật khẩu băm từ DB
+                        rs.getString("password"), // Lấy mật khẩu băm từ DB
                         rs.getString("email"),
                         rs.getInt("phone"),
                         rs.getString("address"),
                         rs.getInt("role")
                 );
-
-                // Kiểm tra mật khẩu
-                if (user != null && PasswordUtil.checkPassword(enteredPassword, user.getPassword())) {
-                    return user; // Đăng nhập thành công
-                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -77,10 +70,9 @@ public class DBDAO {
                 e.printStackTrace();
             }
         }
-
-        // Trả về null nếu không tìm thấy người dùng hoặc mật khẩu không chính xác
         return null;
     }
+
 
 
 
@@ -156,12 +148,12 @@ public class DBDAO {
     // đăng ký
     public User registerUser(User user) {
         try {
-            String query = "INSERT INTO login (username, email, password, phone, address, role) VALUES (?, ?, ?, ?, ?, 0)";
+            String query = "INSERT INTO login (username, password, email, phone, address, role) VALUES (?, ?, ?, ?, ?, 0)";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getEmail());
             ps.setInt(4, user.getPhone());
             ps.setString(5, user.getAddress());
             ps.executeUpdate();
@@ -784,11 +776,8 @@ public class DBDAO {
     // Hàm main để kiểm tra phương thức getAllUsers
     public static void main(String[] args) {
         DBDAO dbdao = new DBDAO();
-        List<Order> orderList = dbdao.getAllOrder();
-        for (Order order : orderList) {
-            System.out.println(order);
-        }
-
+        User user = dbdao.checkLogin("user1@gmail.com");
+        System.out.println(user);
     }
 
 }

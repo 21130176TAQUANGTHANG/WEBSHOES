@@ -8,8 +8,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -60,14 +62,13 @@ public class RegisterServlet extends HttpServlet {
         }
 
         // Băm mật khẩu trước khi lưu vào database
+        // Băm mật khẩu bằng BCrypt
         try {
-            String hashedPassword = PasswordUtil.hashPassword(password); // Sử dụng SHA-256 để băm mật khẩu
-
+            String hashedPassword = hashPassword(password); // Băm mật khẩu
             User user = new User(username, hashedPassword, email, phone, address);
-            dbdao.registerUser(user); // Lưu mật khẩu băm vào database
+            dbdao.registerUser(user); // Lưu người dùng vào DB
             response.sendRedirect("Login.jsp");
         } catch (Exception e) {
-            // Nếu xảy ra lỗi trong quá trình đăng ký
             errorMessage = "Có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.";
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("Register.jsp").forward(request, response);
@@ -135,5 +136,22 @@ public class RegisterServlet extends HttpServlet {
         }
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
         req.getRequestDispatcher("Register.jsp").forward(req,resp);
+    }
+
+    public String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

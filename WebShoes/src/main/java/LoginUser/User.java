@@ -2,7 +2,7 @@ package LoginUser;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User {
     private  String id;
     private  String username;
     private  String password;
@@ -49,13 +49,13 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", phone=" + phone +
                 ", address='" + address + '\'' +
-                ", role='" + role + '\'' +
+                ", role=" + role +
                 '}';
     }
 

@@ -4,10 +4,11 @@ import DBConnect.DBDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.MissingResourceException;
+import java.security.MessageDigest;
 import java.util.ResourceBundle;
 
 @WebServlet("/LoginServlet")
@@ -16,22 +17,27 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
+        System.out.println( "password:   ->  " +password);
         DBDAO dbdao = new DBDAO();
-        User user = dbdao.checkLogin(email, password); // Gọi phương thức checkLogin
+        User user = dbdao.checkLogin(email); // Lấy thông tin người dùng theo email
 
         String error = "Sai tài khoản hoặc mật khẩu";
         if (user != null) {
-            // Đăng nhập thành công
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            response.sendRedirect("product");
-        } else {
-            // Đăng nhập thất bại
-            request.setAttribute("error", error);
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            // Băm mật khẩu nhập vào để so sánh
+            String hashedPassword = hashPassword(password);
+            System.out.println("hashedPassword:   " +hashedPassword);
+            if (hashedPassword.equals(user.getEmail())) {
+                // Đăng nhập thành công
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                response.sendRedirect("product");
+                return;
+            }
         }
 
+        // Đăng nhập thất bại
+        request.setAttribute("error", error);
+        request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 
     @Override
@@ -93,7 +99,22 @@ public class LoginServlet extends HttpServlet {
                 req.getSession().setAttribute("locale", locale);
             }
         }
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
         req.getRequestDispatcher("Login.jsp").forward(req, resp);
+    }
+    public String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
