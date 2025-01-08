@@ -2,6 +2,7 @@ package DBConnect;
 
 import LoginUser.AccountFF;
 import LoginUser.GoogleAccount;
+import LoginUser.PasswordUtil;
 import LoginUser.User;
 import Order.Order;
 import Product.Product;
@@ -39,26 +40,31 @@ public class DBDAO {
         return false;
     }
 
-    // Phương thức kiểm tra đăng nhập
-    public User checkLogin(String email, String password) {
+    public User checkLogin(String email, String enteredPassword) {
+        User user = null;
         try {
-            String query = "SELECT * FROM login WHERE email=? AND password=?";
+            String query = "SELECT * FROM login WHERE email = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
-            ps.setString(2, password);
             rs = ps.executeQuery();
-            while (rs.next()) {
-                User a = new User(
+
+            if (rs.next()) {
+                // Lấy thông tin người dùng từ cơ sở dữ liệu
+                user = new User(
                         rs.getString("id"),
                         rs.getString("username"),
-                        rs.getString("password"),
+                        rs.getString("password"), // Mật khẩu băm từ DB
                         rs.getString("email"),
                         rs.getInt("phone"),
                         rs.getString("address"),
                         rs.getInt("role")
                 );
-                return a;
+
+                // Kiểm tra mật khẩu
+                if (user != null && PasswordUtil.checkPassword(enteredPassword, user.getPassword())) {
+                    return user; // Đăng nhập thành công
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -72,8 +78,11 @@ public class DBDAO {
             }
         }
 
+        // Trả về null nếu không tìm thấy người dùng hoặc mật khẩu không chính xác
         return null;
     }
+
+
 
     public AccountFF checkFacebookAccount(String name) {
         try {

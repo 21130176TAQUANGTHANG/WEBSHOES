@@ -36,6 +36,7 @@
 <body>
 <%
     Locale locale = (Locale) session.getAttribute("locale");
+
     if (locale == null) {
         locale = new Locale("vi", "VN"); // Ngôn ngữ mặc định là Tiếng Việt
     }
@@ -47,8 +48,8 @@
         <fmt:message key="home.title" />
     </button>
     <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=vi">Tiếng Việt</a></li>
-        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/product?lang=en">English</a></li>
+        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/productlist?lang=vi">Tiếng Việt</a></li>
+        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/productlist?lang=en">English</a></li>
     </ul>
 </div>
 
@@ -81,58 +82,37 @@
                 </li>
             </ul>
 
-            <form class="d-flex input-group w-auto me-3">
-                    <input
-                            type="search"
-                            class="form-control"
-                            placeholder="Tìm kiếm"
-                            aria-label="Search"
-                    />
-                    <button
-                            data-mdb-ripple-init
-                            class="btn btn-outline-primary"
-                            type="button"
-                            data-mdb-ripple-color="dark"
-                    >
-                        Tìm kiếm
-                    </button>
-                </form>
 
                 <c:if test="${sessionScope.user != null}">
                     <div class="dropdown me-5">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-mdb-toggle="dropdown" aria-expanded="false">
-                            Xin chào, ${sessionScope.user.username}
+                            <%= bundle.getString("home.hello") %>, ${sessionScope.user.username}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <!-- Hiển thị thông tin cá nhân -->
                             <li>
                                 <a class="dropdown-item" href="userProfileServlet">
-                                    <i class="fas fa-user-circle me-2"></i>Thông tin cá nhân
+                                    <i class="fas fa-user-circle me-2"></i><%= bundle.getString("menu.information") %>
                                 </a>
                             </li>
                             <!-- Nút đăng xuất -->
                             <li>
                                 <c:if test="${sessionScope.user.role == 1}">
                                     <a href="admin.jsp" class="dropdown-item">
-                                        <i class="fas fa-user-circle me-2"></i>Go to Admin Page
+                                        <i class="fas fa-user-circle me-2"></i><%= bundle.getString("admin.home") %>
                                     </a>
                                 </c:if>
                             </li>
                             <li>
                                 <a href="CustomerOrderServlet" class="dropdown-item">
-                                    <i class="fas fa-user-circle me-2"></i>Đơn hàng
-                                </a>
-                            </li>
-                            <li>
-                                <a href="CustomerHistoryOrder.jsp" class="dropdown-item">
-                                    <i class="fas fa-user-circle me-2"></i>Lịch sử đặt hàng
+                                    <i class="fas fa-user-circle me-2"></i><%= bundle.getString("menu.order") %>
                                 </a>
                             </li>
 
                             <li>
                                 <a class="dropdown-item text-danger" href="LogoutServlet">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                    <i class="fas fa-sign-out-alt me-2"></i><%= bundle.getString("menu.logout") %>
                                 </a>
                             </li>
                         </ul>
@@ -141,17 +121,17 @@
 
                 <c:if test="${sessionScope.facebookUser !=null}">
                     <h3>${sessionScope.facebookUser.name}</h3>
-                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+                    <a href="LogoutServlet" class="btn btn-danger"><%= bundle.getString("menu.logout") %></a>
                 </c:if>
 
                 <c:if test="${sessionScope.googleUser !=null}">
                     <h3>${sessionScope.googleUser.name}</h3>
-                    <a href="LogoutServlet" class="btn btn-danger">Logout</a>
+                    <a href="LogoutServlet" class="btn btn-danger"><%= bundle.getString("menu.logout") %></a>
                 </c:if>
 
 
                 <c:if test="${sessionScope.user ==null}">
-                    <a href="Login.jsp">Dang nhap</a>
+                    <a href="LoginServlet"><%= bundle.getString("menu.login") %></a>
                 </c:if>
             </div>
         </div>

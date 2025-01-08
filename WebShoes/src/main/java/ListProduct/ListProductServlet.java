@@ -38,7 +38,7 @@ public class ListProductServlet extends HttpServlet {
             double exchangeRate = Double.parseDouble(bundle.getString("exchangeRate"));
             String currencySymbol = bundle.getString("currencySymbol");
 
-            req.setAttribute("exchangeRate", exchangeRate);
+            req.setAttribute("exchangeRate", exchangeRate   );
             req.setAttribute("currencySymbol", currencySymbol);
         }
 

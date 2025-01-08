@@ -4,11 +4,14 @@ package LoginUser;
 import DBConnect.DBDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 @WebServlet(name = "RegisterServlet", value = "/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
@@ -56,13 +59,12 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // Đăng ký người dùng
+        // Băm mật khẩu trước khi lưu vào database
         try {
-            // Băm mật khẩu
-            String hashedPassword = PasswordUtil.hashPassword(password);
+            String hashedPassword = PasswordUtil.hashPassword(password); // Sử dụng SHA-256 để băm mật khẩu
 
             User user = new User(username, hashedPassword, email, phone, address);
-            dbdao.registerUser(user);
+            dbdao.registerUser(user); // Lưu mật khẩu băm vào database
             response.sendRedirect("Login.jsp");
         } catch (Exception e) {
             // Nếu xảy ra lỗi trong quá trình đăng ký
@@ -70,5 +72,68 @@ public class RegisterServlet extends HttpServlet {
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("Register.jsp").forward(request, response);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Lấy tham số ngôn ngữ từ URL (nếu có)
+        String lang = req.getParameter("lang");
+        Locale locale;
+
+        if (lang != null) {
+            // Thiết lập locale dựa trên tham số lang
+            switch (lang) {
+                case "vi":
+                    locale = new Locale("vi", "VN");
+                    break;
+                case "en":
+                    locale = new Locale("en", "US");
+                    break;
+                default:
+                    locale = new Locale("vi", "VN");
+            }
+
+            // Lưu ngôn ngữ vào session
+            req.getSession().setAttribute("locale", locale);
+
+            // **Lưu ngôn ngữ vào Cookie**
+            Cookie langCookie = new Cookie("lang", lang);
+            langCookie.setMaxAge(60 * 60 * 24 * 30); // Lưu trong 30 ngày
+            resp.addCookie(langCookie);
+        } else {
+            // Nếu không có tham số `lang`, kiểm tra trong Cookie
+            Cookie[] cookies = req.getCookies();
+            String cookieLang = null;
+
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("lang")) {
+                        cookieLang = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+
+            // Thiết lập locale từ Cookie nếu tồn tại
+            if (cookieLang != null) {
+                switch (cookieLang) {
+                    case "vi":
+                        locale = new Locale("vi", "VN");
+                        break;
+                    case "en":
+                        locale = new Locale("en", "US");
+                        break;
+                    default:
+                        locale = new Locale("vi", "VN");
+                }
+                req.getSession().setAttribute("locale", locale);
+            } else {
+                // Nếu không có Cookie hoặc Session, sử dụng mặc định
+                locale = new Locale("vi", "VN");
+                req.getSession().setAttribute("locale", locale);
+            }
+        }
+        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+        req.getRequestDispatcher("Register.jsp").forward(req,resp);
     }
 }
