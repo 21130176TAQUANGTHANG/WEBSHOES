@@ -49,13 +49,14 @@
         <div class="container-fluid">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link active" href="#">New & Featured</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Nike</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Adidas</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Others</a></li>
+                <li class="nav-item"><a class="nav-link" href="filterProduct?logo=0">Nike</a></li>
+                <li class="nav-item"><a class="nav-link" href="filterProduct?logo=2">Adidas</a></li>
+                <li class="nav-item"><a class="nav-link" href="filterProduct?logo=3">Others</a></li>
+
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-secondary" type="submit"><i class="fas fa-search"></i></button>
+            <form action="search" method="get">
+                <input type="text" name="name" placeholder="Search by product name" />
+                <button type="submit">Search</button>
             </form>
         </div>
     </nav>
@@ -94,6 +95,7 @@
         © 2024 Danh sách sản phẩm. All Rights Reserved.
     </div>
 </footer>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.js"></script>
 </body>

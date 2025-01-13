@@ -185,7 +185,7 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-phone fa-lg me-3 fa-fw"></i>
                       <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                        <input type="password" id="form3Example5c" class="form-control" name="phone"/>
+                        <input type="text" id="form3Example5c" class="form-control" name="phone"/>
                         <label class="form-label" for="form3Example5c"><%= bundle.getString("sign.phone")%></label>
                       </div>
                     </div>
@@ -193,7 +193,7 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-map-location-dot fa-lg me-3 fa-fw"></i>
                       <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                        <input type="password" id="form3Example5cd" class="form-control" name="address"/>
+                        <input type="text" id="form3Example5cd" class="form-control" name="address"/>
                         <label class="form-label" for="form3Example5cd"><%= bundle.getString("sign.address")%></label>
                       </div>
                     </div>

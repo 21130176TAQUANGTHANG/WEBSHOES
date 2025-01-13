@@ -168,7 +168,7 @@
                     <div class="row justify-content-between">
                       <div class="col-6">
                         <div class="text-end">
-                          <a href="#!" class="link-secondary text-decoration-none"><%= bundle.getString("login.forgotpassword")%></a>
+                          <a href="ForgotPassword.jsp" class="link-secondary text-decoration-none"><%= bundle.getString("login.forgotpassword")%></a>
                         </div>
                       </div>
                     </div>

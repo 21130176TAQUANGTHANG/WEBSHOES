@@ -50,6 +50,18 @@ public class Order {
 
     }
 
+    public Order(int orderId, String userId, int totalPrice, Timestamp orderDate, String notes, String name, String address, String phone, String status) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.totalPrice = totalPrice;
+        this.orderDate = orderDate;
+        this.notes = notes;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.status = status;
+    }
+
     // Getter và Setter cho các thuộc tính
     public int getOrderId() {
         return orderId;

@@ -17,7 +17,6 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        System.out.println( "password:   ->  " +password);
         DBDAO dbdao = new DBDAO();
         User user = dbdao.checkLogin(email); // Lấy thông tin người dùng theo email
 
@@ -25,7 +24,6 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             // Băm mật khẩu nhập vào để so sánh
             String hashedPassword = hashPassword(password);
-            System.out.println("hashedPassword:   " +hashedPassword);
             if (hashedPassword.equals(user.getEmail())) {
                 // Đăng nhập thành công
                 HttpSession session = request.getSession();

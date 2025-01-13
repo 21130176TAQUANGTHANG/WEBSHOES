@@ -35,7 +35,7 @@ public class EditProductServlet extends HttpServlet {
 
             // Lấy file hình ảnh
             Part filePart = req.getPart("productImage");
-            String uploadPath = "D:\\LTWEB\\WebShoes\\image\\";
+            String uploadPath = "D:\\ManageImage\\";
             String newImageFile = null;
 
             if (filePart != null && filePart.getSize() > 0) {

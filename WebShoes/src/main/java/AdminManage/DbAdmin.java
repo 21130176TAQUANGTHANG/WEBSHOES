@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DbAdmin {
@@ -236,10 +238,10 @@ public class DbAdmin {
             throw new RuntimeException(e);
         }
     }
+
     public static void main(String[] args) {
         DbAdmin dbAdmin = new DbAdmin();
-        Order p = dbAdmin.getOrderById(40);
-        System.out.println(p);
+
 
     }
 
